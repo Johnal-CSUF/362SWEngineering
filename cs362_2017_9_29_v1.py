@@ -5,7 +5,7 @@ from __future__ import print_function
 
 import sqlite3
 from datetime import datetime
-#TEST123
+
 connection = sqlite3.connect ("parts.db")
 cursor = connection.cursor()
 
