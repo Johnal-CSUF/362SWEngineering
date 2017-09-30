@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-#Dana Shorts, Johnal Leifsson, Helen, Kavit, Natalie
+#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit, Natalie
 #Basic Inventory and Customer program
 from __future__ import print_function
 
 import sqlite3
 from datetime import datetime
+
 #TEST123
+#Test 1234 Johnal
+
 connection = sqlite3.connect ("parts.db")
 cursor = connection.cursor()
 
@@ -187,7 +190,6 @@ def main():
                 previous()
 
         elif cmd == 3:
-            bl = True
             print("1 = Delete Discontinued item from Inventory and Products")
             print("2 = List the item which are reached the threshold for reordering")
             print("3 = Previous Page")
@@ -296,7 +298,7 @@ def Discontinued():
         print("Input the item number discontinued item")
         item = input('Enter item number: ')
         cursor.execute("DELETE FROM INVENTORY WHERE Item_Number = ?", (item,))
-        cursor.execute("DELETE FROM PRODUCTS WHERE Item_Number = ?", (item,))
+        cursor.execute("DELETE FROM PRODUCTS WHERE ItemNumber = ?", (item,))
 
 def newSale():
     products_table = 'PRODUCTS'
