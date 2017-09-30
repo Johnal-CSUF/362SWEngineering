@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit, Natalie
+#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie
 #Basic Inventory and Customer program
 from __future__ import print_function
 
