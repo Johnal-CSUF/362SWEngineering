@@ -6,9 +6,6 @@ from __future__ import print_function
 import sqlite3
 from datetime import datetime
 
-#TEST123
-#Test 1234 Johnal
-
 connection = sqlite3.connect ("parts.db")
 cursor = connection.cursor()
 
@@ -20,7 +17,7 @@ Fname VARCHAR(20) NOT NULL,
 Lname VARCHAR(30) NOT NULL,
 Phone VARCHAR(15) NOT NULL,
 Email VARCHAR(50),
-YTD_Sales VARCHAR(20) NOT NULL,
+YTD_Sales VARCHAR(20),
 PRIMARY KEY(CustID) );"""
 cursor.execute (sql_command)
 
@@ -276,7 +273,7 @@ def addOrder():
     
     custId = input('Enter client ID: ')
     item = int(input('Enter item number: '))
-    date = input('Enter order date: ')
+    date = input('Enter order date (MMDDYYYY): ')
     quant = int(input('Enter quantities of the item: '))
     print ("The order has been added to the database")
     sql_command = "INSERT INTO ORDERS VALUES (?, ?, ?, ?);"
