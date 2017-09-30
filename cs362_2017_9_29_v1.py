@@ -226,12 +226,40 @@ def inventory():
 
 
 def customers():
-    print("------Customer Report------")
+    customer_table = 'CUSTOMERS'
+    cust_ID = 'CustID'
+    fname = 'Fname'    
+    lname = 'Lname'    
+    phone = 'Phone'    
+    email = 'Email'    
+    ytd = 'YTD_Sales'    
     
-    cursor.execute("SELECT * FROM CUSTOMERS") 
-    result = cursor.fetchall() 
-    for r in result:
-        print (r)    
+    
+    running = True
+    while running:
+        print("1 = Full Customer Report") #Item Number, Products, Stock Levels, 
+        print("2 = Individual Customer Report") #CustID, First Name, Last Name, Phone, Email, YTD Sales   
+        
+        cmd = int(input(">> "))
+        if cmd == 1:      
+            print("------Full Customer Report------")
+    
+            cursor.execute("SELECT * FROM CUSTOMERS") 
+            result = cursor.fetchall() 
+            for r in result:
+                print (r)    
+                
+        if cmd == 2:      
+            print("------Individual Customer Report------")
+            
+            custId = raw_input('Please enter the existing client ID: ')
+            cursor.execute('SELECT * FROM CUSTOMERS WHERE {idf}={my_id}'.\
+                               format(coi = fname, tn=customer_table, idf = cust_ID, my_id = custId))
+            id_exists = cursor.fetchall()
+            if id_exists:
+                print('Customer Report: {}'.format(id_exists))
+            else:
+                print('{} does not exist'.format(custId))        
     
 
 def products():
