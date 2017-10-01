@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie
+#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie <Last Name>
 #Basic Inventory and Customer program
 from __future__ import print_function
 
@@ -33,7 +33,7 @@ FOREIGN KEY (Units_In_Stock) REFERENCES PRODUCTS (Available) );"""
 cursor.execute (sql_command)
 
 
-######## MANUAL ENTRY OF INVENTORY ITEMS #####
+######## MANUAL ENTRY OF INVENTORY ITEMS ########
 sql_command = """INSERT OR REPLACE INTO INVENTORY (Item_Number, Name, Units_In_Stock)
 VALUES (88222, 'Intake', 572); """
 cursor.execute(sql_command)
