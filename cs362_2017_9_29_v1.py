@@ -33,7 +33,7 @@ FOREIGN KEY (Units_In_Stock) REFERENCES PRODUCTS (Available) );"""
 cursor.execute (sql_command)
 
 
-######## MANUAL ENTRY OF INVENTORY ITEMS #####
+######## MANUAL ENTRY OF INVENTORY ITEMS ########
 sql_command = """INSERT OR REPLACE INTO INVENTORY (Item_Number, Name, Units_In_Stock)
 VALUES (88222, 'Intake', 572); """
 cursor.execute(sql_command)
