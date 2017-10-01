@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie <Last Name>
 #Basic Inventory and Customer program
-#Hopefully last test.
+
 from __future__ import print_function
 
 import sqlite3
