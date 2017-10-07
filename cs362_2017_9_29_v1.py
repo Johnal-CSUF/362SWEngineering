@@ -169,7 +169,7 @@ def main():
         elif cmd == 2:
             print("1 = Add Customer")
             print("2 = Add Order")
-            print("3 = Add Prodects")
+            print("3 = Add/Edit Products")
             print("4 = Add Inventory")
             print("5 = Previous Page")
             cmd = input(">> ")
@@ -178,8 +178,7 @@ def main():
             elif cmd == 2:
                 addOrder()
             elif cmd == 3:
-                pass
-            #addProducts()
+                addProducts()
             elif cmd == 4:
                 pass
             #addInventory()
@@ -238,7 +237,8 @@ def customers():
     running = True
     while running:
         print("1 = Full Customer Report") #Item Number, Products, Stock Levels, 
-        print("2 = Individual Customer Report") #CustID, First Name, Last Name, Phone, Email, YTD Sales   
+        print("2 = Individual Customer Report") #CustID, First Name, Last Name, Phone, Email, YTD Sales
+        
         
         cmd = int(input(">> "))
         if cmd == 1:      
@@ -260,7 +260,9 @@ def customers():
                 print('Customer Report: {}'.format(id_exists))
             else:
                 print('{} does not exist'.format(custId))        
-    
+            
+                                
+            
 
 def products():
     print("------Product Report------")
@@ -296,6 +298,54 @@ def addCustomer():
     sql_command = "INSERT INTO CUSTOMERS VALUES (?, ?, ?, ?, ?, ?);"
     cursor.execute(sql_command, (custId, first, last, phone, email, ytd))
     connection.commit()    
+    
+    
+    
+def addProducts():
+    
+    running = True
+    while running:
+        print("1 = Add a new product") #...
+        print("2 = Edit an exisitng product") #...
+        
+        cmd = int(input(">> "))
+        if cmd == 1:      
+            print("------Please enter new product information------")
+            
+            itemnum = raw_input('Enter Item Number: ')
+            descrip = raw_input('Enter Item Description: ')
+            cost = raw_input('Enter product price: ')  
+            stock = raw_input('Enter available quantities: ')
+            custclass = raw_input('Enter product class: ')
+            origin = raw_input('Enter product origin: ')    
+            ldtime = raw_input('Enter product lead time: ')   
+        
+            print ("The product has been added to the database")
+        
+            sql_command = "INSERT INTO PRODUCTS VALUES (?, ?, ?, ?, ?, ?, ?);"
+            cursor.execute(sql_command, (itemnum, descrip, cost, stock, custclass, origin, ldtime))
+            connection.commit()            
+            
+        if cmd == 2:      
+            print("------Please enter the item number to edit------")
+            
+            itemnum = raw_input('Enter Item Number: ')
+            
+            print("What information would you like to udpate ? Desc, Price, Avail, Class, Origin, or lead Time")
+            choice = raw_input(': ')
+            
+            if choice == 'Desc':
+                Desc = raw_input('Enter a new product description: ')
+                sql_command = "UPDATE PRODUCTS SET Description = 'Desc' WHERE ItemNumber = 'itemnum'"
+                cursor.execute (sql_command)                
+                connection.commit()             
+             
+             
+                    
+            
+            print ("The product has been added to the database")
+            
+                
 
 def addOrder():
     print("------ADD Orders------")
