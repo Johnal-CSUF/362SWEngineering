@@ -146,7 +146,8 @@ def main():
         print("3 = Discontinued, threshold for reordering")
         print("4 = Daily Ledger")
         print("5 = New Sale")
-        print("6 = Exit program")
+        print("6 = End of Day Report")
+        print("7 = Exit program")
         cmd = int(input(">> "))
         prev = True
         if cmd == 1:
@@ -205,8 +206,12 @@ def main():
         elif cmd == 5:
             # call new sale function
             newSale()
-            
+
         elif cmd == 6:
+            # End of day report
+            endofday()
+
+        elif cmd == 7:
             # call the end function
             end()
             break
@@ -419,16 +424,32 @@ def end():
     print("ending Inventory System.....")
     running = False
 
+def endofday():
+    cash = 0
+    card = 0
+    print("----------------Total Cash Sale----------------")
+    cursor.execute("SELECT * FROM RECEIPTS WHERE PaymentType == 'CASH'")
+    result = cursor.fetchall()
+    for c in result:
+        cash = cash + 1
+        print(c)
+
+    print ("Total Cash Sale ", cash)
+    print("----------------Total Credit/debit Sale----------------")
+    cursor.execute("SELECT * FROM RECEIPTS WHERE PaymentType == 'CARD'")
+    result = cursor.fetchall()
+    for c in result:
+        card = card + 1
+        print(c)
+    print("Total Card Sale ", card)
+    #print(card)
+    #print("\n")
+    print("----------------Total Items “damaged out”----------------")
+    print ("\n\n")
+
+
 def previous():
     prev = False
-
-def cashsales():
-    global cashsale
-    cashsale += 1
-
-def cashsaletotals () :
-    print("--------Cash Sales Totals------------")
-    print(cashsale)
 
 
 # -----------------------------------------------
