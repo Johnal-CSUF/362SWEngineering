@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie <Last Name>
+#Dana Shorts, Johnal Leifsson, Helen, Kavit, Natalie
 #Basic Inventory and Customer program
-
 from __future__ import print_function
 
 import sqlite3
 from datetime import datetime
-
+#TEST123
 connection = sqlite3.connect ("parts.db")
 cursor = connection.cursor()
 
@@ -34,7 +33,7 @@ FOREIGN KEY (Units_In_Stock) REFERENCES PRODUCTS (Available) );"""
 cursor.execute (sql_command)
 
 
-######## MANUAL ENTRY OF INVENTORY ITEMS ########
+######## MANUAL ENTRY OF INVENTORY ITEMS #####
 sql_command = """INSERT OR REPLACE INTO INVENTORY (Item_Number, Name, Units_In_Stock)
 VALUES (88222, 'Intake', 572); """
 cursor.execute(sql_command)
@@ -187,6 +186,7 @@ def main():
                 previous()
 
         elif cmd == 3:
+            bl = True
             print("1 = Delete Discontinued item from Inventory and Products")
             print("2 = List the item which are reached the threshold for reordering")
             print("3 = Previous Page")
@@ -259,7 +259,10 @@ def customers():
             if id_exists:
                 print('Customer Report: {}'.format(id_exists))
             else:
-                print('{} does not exist'.format(custId))        
+                print('{} does not exist'.format(custId))  
+                
+        else:
+            break
             
                                 
             
@@ -307,6 +310,8 @@ def addProducts():
     while running:
         print("1 = Add a new product") #...
         print("2 = Edit an exisitng product") #...
+        print("*****Press any other key to exit") #...
+        
         
         cmd = int(input(">> "))
         if cmd == 1:      
@@ -328,22 +333,52 @@ def addProducts():
             
         if cmd == 2:      
             print("------Please enter the item number to edit------")
+            itemnum = raw_input(': ')
             
-            itemnum = raw_input('Enter Item Number: ')
-            
-            print("What information would you like to udpate ? Desc, Price, Avail, Class, Origin, or lead Time")
+            print("What information would you like to udpate ? Desc, Price, Avail, Class, Orgn, or lead")
             choice = raw_input(': ')
             
             if choice == 'Desc':
-                Desc = raw_input('Enter a new product description: ')
-                sql_command = "UPDATE PRODUCTS SET Description = 'Desc' WHERE ItemNumber = 'itemnum'"
-                cursor.execute (sql_command)                
-                connection.commit()             
-             
-             
-                    
+                newDesc = raw_input('Enter a new product description: ')
+                cursor.execute ("UPDATE PRODUCTS SET Description = ? WHERE ItemNumber = ?", [newDesc, itemnum])                
+                connection.commit()     
+                
+            elif choice == 'Price':
+                newPrice = raw_input('Enter a new product price: ')
+                cursor.execute ("UPDATE PRODUCTS SET Price = ? WHERE ItemNumber = ?", [newPrice, itemnum])                
+                connection.commit()
+                
+            elif choice == 'Avail':
+                newAvail = raw_input('Enter a new product availability: ')
+                cursor.execute ("UPDATE PRODUCTS SET Available = ? WHERE ItemNumber = ?", [newAvail, itemnum])                
+                connection.commit() 
+                
+            elif choice == 'Class':
+                newClass = raw_input('Enter a new product class: ')
+                cursor.execute ("UPDATE PRODUCTS SET Class = ? WHERE ItemNumber = ?", [newClass, itemnum])                
+                connection.commit()       
+                
+            elif choice == 'Orgn':
+                newOrigin = raw_input('Enter a new product origin: ')
+                cursor.execute ("UPDATE PRODUCTS SET Origin = ? WHERE ItemNumber = ?", [newOrigin, itemnum])                
+                connection.commit()                  
+                
+            elif choice == 'Lead':
+                newlead = raw_input('Enter a new product lead time: ')
+                cursor.execute ("UPDATE PRODUCTS SET Lead_Time = ? WHERE ItemNumber = ?", [newlead, itemnum])                
+                connection.commit()  
+                
+        
+            print ("*The product has been updated*")
+            selection = raw_input('Update or add another product? (Y)es, (N)o: ')
             
-            print ("The product has been added to the database")
+            if selection == 'Y':
+                previous()
+            else:
+                running = False
+            
+        else:
+            running = False
             
                 
 
@@ -374,7 +409,7 @@ def Discontinued():
         print("Input the item number discontinued item")
         item = input('Enter item number: ')
         cursor.execute("DELETE FROM INVENTORY WHERE Item_Number = ?", (item,))
-        cursor.execute("DELETE FROM PRODUCTS WHERE ItemNumber = ?", (item,))
+        cursor.execute("DELETE FROM PRODUCTS WHERE Item_Number = ?", (item,))
 
 def newSale():
     products_table = 'PRODUCTS'
