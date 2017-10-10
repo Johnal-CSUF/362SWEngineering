@@ -425,23 +425,28 @@ def end():
     running = False
 
 def endofday():
-    cash = 0
-    card = 0
+    numcash = 0
+    numcard = 0
     print("----------------Total Cash Sale----------------")
     cursor.execute("SELECT * FROM RECEIPTS WHERE PaymentType == 'CASH'")
     result = cursor.fetchall()
     for c in result:
-        cash = cash + 1
+        numcash = numcash + 1
         print(c)
-
-    print ("Total Cash Sale ", cash)
+    cursor.execute("SELECT SUM(Total) FROM RECEIPTS WHERE PaymentType == 'CASH'")
+    cashresult = cursor.fetchall()
+    print ("\nTotal Cash Amount Sales : $", cashresult[0][0])
+    print("Total Number of Cash Sale ", numcash)
     print("----------------Total Credit/debit Sale----------------")
     cursor.execute("SELECT * FROM RECEIPTS WHERE PaymentType == 'CARD'")
     result = cursor.fetchall()
     for c in result:
-        card = card + 1
+        numcard = numcard + 1
         print(c)
-    print("Total Card Sale ", card)
+    cursor.execute("SELECT SUM(Total) FROM RECEIPTS WHERE PaymentType == 'CARD'")
+    cardresult = cursor.fetchall()
+    print("\nTotal Card Amount Sales : $", cardresult[0][0])
+    print("Total Number of Card Sale ", numcard)
     #print(card)
     #print("\n")
     print("----------------Total Items “damaged out”----------------")
