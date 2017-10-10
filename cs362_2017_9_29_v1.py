@@ -424,6 +424,7 @@ def end():
     print("ending Inventory System.....")
     running = False
 
+#Kavit
 def endofday():
     numcash = 0
     numcard = 0
