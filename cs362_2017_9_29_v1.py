@@ -297,7 +297,7 @@ def transactions():
     
     cursor.execute('''SELECT TRANSACTIONS.OrderDate, PRODUCTS.Description, CUSTOMERS.Fname, CUSTOMERS.Lname, CUSTOMERS.Phone, TRANSACTIONS.Paid
                     FROM CUSTOMERS, TRANSACTIONS, PRODUCTS WHERE CUSTOMERS.CustID = TRANSACTIONS.CustID AND TRANSACTIONS.Itemnum = PRODUCTS.ItemNumber AND CUSTOMERS.CustID = ?''', (id,))        
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     for r in result:
         print (r)        
         
