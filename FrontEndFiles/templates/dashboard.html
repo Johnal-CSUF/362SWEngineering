@@ -2,6 +2,7 @@
 
 {%block body%}
 	<h1>Dashboard <small>Welcome {{session.username}}</small></h1>
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='idk/style.css') }}">
 	<a class="btn btn-success" href="/add_report">Add Report</a>
 	<hr>
 	<table class="table table-striped">
@@ -29,4 +30,9 @@
 			</tr>
 		{% endfor %}
 	</table>
+
+<style media="screen" type="text/css">
+
+</style>
+
 {%endblock%}

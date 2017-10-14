@@ -1,5 +1,4 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
-#from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -16,8 +15,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 #init MySQL
 mysql = MySQL(app)
 
-#Articles = Articles()
-
 #index
 @app.route('/')
 def index():
@@ -31,7 +28,7 @@ def about():
 #reports
 @app.route('/reports')
 def reports():
-		#create cursor
+	#create cursor
 	cur = mysql.connection.cursor()
 
 	#get articles
@@ -160,17 +157,56 @@ def logout():
 	flash('You are now logged out', 'success')
 	return redirect(url_for('login'))
 
-#about
+#new sales
 @app.route('/sales')
 @is_logged_in
 def sales():
 	return render_template('sales.html')
 
-#about
-@app.route('/returns')
+#Discontinued
+@app.route('/discontinued')
 @is_logged_in
-def returns():
-	return render_template('returns.html')
+def discontinued():
+	return render_template('discontinued.html')
+
+#adding
+@app.route('/adding')
+@is_logged_in
+def adding():
+	return render_template('adding.html')
+
+#daily ledge
+@app.route('/ledger')
+@is_logged_in
+def ledger():
+	return render_template('daily_ledger.html')
+
+#all reports
+@app.route('/all_reports')
+@is_logged_in
+def all_reports():
+		#create cursor
+		cur = mysql.connection.cursor()
+
+		#get articles
+		result = cur.execute("SELECT * FROM articles")
+
+		articles = cur.fetchall()
+
+		if result > 0:
+			return render_template('new_reports.html', articles = articles)
+		else:
+			msg = 'No Articles Found'
+			return render_template('new_reports.html', msg = msg)
+
+		#close connection
+		cur.close()
+
+#menu
+@app.route('/menu')
+@is_logged_in
+def menu():
+	return render_template('menu.html')
 
 #dashboard
 @app.route('/dashboard')
