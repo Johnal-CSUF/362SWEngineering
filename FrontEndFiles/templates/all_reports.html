@@ -7,7 +7,7 @@
       <hr>
         <div class="row">
           <h3>Basic Reports</h3>
-          <a class="btn btn-success" href="/add_report">Add Report</a>
+          <a class="btn btn-success" href="/add_basicReport">Add Report</a>
           <br><br>
               <table class="table table-striped">
             		<tr>
@@ -18,15 +18,15 @@
             			<th> </th>
             			<th> </th>
             		</tr>
-            		{%for article in articles%}
+            		{%for article in basicReports%}
             			<tr>
             				<td>{{article.id}}</td>
             				<td><a href="report/{{article.id}}"> {{article.title}}</a></td>
             				<td>{{article.author}}</td>
             				<td>{{article.create_date}}</td>
-            				<td><a href="edit_report/{{article.id}}" class="btn btn-default pull-right">Edit</a></td>
+            				<td><a href="edit_basicReport/{{article.id}}" class="btn btn-default pull-right">Edit</a></td>
             				<td>
-            					<form action="{{url_for('delete_report', id=article.id)}}" method="post">
+            					<form action="{{url_for('delete_basicReport', id=article.id)}}" method="post">
             						<input type="hidden" name="_method" value="DELETE">
             						<input type="submit" value="Delete" class="btn btn-danger">
             					</form>

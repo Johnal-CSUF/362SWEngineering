@@ -25,34 +25,14 @@ def index():
 def about():
 	return render_template('about.html')
 
-#reports
-@app.route('/reports')
-def reports():
-	#create cursor
-	cur = mysql.connection.cursor()
-
-	#get articles
-	result = cur.execute("SELECT * FROM articles")
-
-	articles = cur.fetchall()
-
-	if result > 0:
-		return render_template('reports.html', articles = articles)
-	else:
-		msg = 'No Articles Found'
-		return render_template('reports.html', msg = msg)
-
-	#close connection
-	cur.close()
-
-#single article
+#single report
 @app.route('/report/<string:id>/')
 def report(id):
 	#create cursor
 	cur = mysql.connection.cursor()
 
-	#get article
-	result = cur.execute("SELECT * FROM articles WHERE id = %s", [id])
+	#get report
+	result = cur.execute("SELECT * FROM basicReports WHERE id = %s", [id])
 
 	article = cur.fetchone()
 
@@ -79,16 +59,12 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        # Create cursor
         cur = mysql.connection.cursor()
 
-        # Execute query
         cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
 
-        # Commit to DB
         mysql.connection.commit()
 
-        # Close connection
         cur.close()
 
         flash('You are now registered and can log in', 'success')
@@ -96,7 +72,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-    #user login
+#user login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -169,112 +145,111 @@ def sales():
 def discontinued():
 	return render_template('discontinued.html')
 
-#adding
-@app.route('/adding')
-@is_logged_in
-def adding():
-	return render_template('adding.html')
-
-#daily ledge
+#daily ledger
 @app.route('/ledger')
 @is_logged_in
 def ledger():
 	return render_template('daily_ledger.html')
 
+#adding
+@app.route('/adding')
+@is_logged_in
+def adding():
+	cur = mysql.connection.cursor()
+
+	result = cur.execute("SELECT * FROM customers")
+	customers = cur.fetchall()
+
+	resultTwo = cur.execute("SELECT * FROM orders")
+	orders = cur.fetchall()
+
+	if result > 0 and resultTwo > 0:
+		return render_template('adding.html', customers = customers, orders = orders)
+	if result > 0 and resultTwo == 0:
+		msg = 'No Customers Found'
+		return render_template('adding.html', customers = customers, msg = msg)
+	if result == 0 and resultTwo > 0:
+		msg = 'No Customers Found'
+		return render_template('adding.html', msg = msg, orders = orders)
+	else:
+		msg = 'No Customers or Orders Found'
+		return render_template('adding.html', msg = msg)
+
+	cur.close()
+
 #all reports
 @app.route('/all_reports')
 @is_logged_in
 def all_reports():
-		#create cursor
 		cur = mysql.connection.cursor()
 
-		#get articles
-		result = cur.execute("SELECT * FROM articles")
-
-		articles = cur.fetchall()
+		result = cur.execute("SELECT * FROM basicReports")
+		basicReports = cur.fetchall()
 
 		if result > 0:
-			return render_template('new_reports.html', articles = articles)
+			return render_template('all_reports.html', basicReports = basicReports)
 		else:
-			msg = 'No Articles Found'
-			return render_template('new_reports.html', msg = msg)
+			msg = 'No Reports Found'
+			return render_template('all_reports.html', msg = msg)
 
-		#close connection
 		cur.close()
-
-#menu
-@app.route('/menu')
-@is_logged_in
-def menu():
-	return render_template('menu.html')
 
 #dashboard
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-	#create cursor
 	cur = mysql.connection.cursor()
 
-	#get articles
-	result = cur.execute("SELECT * FROM articles")
-
-	articles = cur.fetchall()
+	result = cur.execute("SELECT * FROM basicReports")
+	basicReports = cur.fetchall()
 
 	if result > 0:
-		return render_template('dashboard.html', articles = articles)
+		return render_template('dashboard.html', basicReports = basicReports)
 	else:
-		msg = 'No Articles Found'
+		msg = 'No Reports Found'
 		return render_template('dashboard.html', msg = msg)
 
 	#close connection
 	cur.close()
 
-#articleform class
-class ArticleForm(Form):
+#BasicReportForm class
+class BasicReportForm(Form):
 	title = StringField('Title', [validators.Length(min=1, max=200)])
 	body = TextAreaField('Body', [validators.Length(min=30)])
 
-#add article
-@app.route('/add_report', methods=['Get','POST'])
+#add basic report
+@app.route('/add_basicReport', methods=['Get','POST'])
 @is_logged_in
-def add_report():
-	form = ArticleForm(request.form)
+def add_basicReport():
+	form = BasicReportForm(request.form)
 	if request.method == 'POST' and form.validate():
 		title = form.title.data
 		body = form.body.data
 
-		#create cursor
 		cur = mysql.connection.cursor()
 
-		#execute
-		cur.execute("INSERT INTO articles(title, body, author) VALUE(%s, %s, %s)", (title, body, session['username']))
+		cur.execute("INSERT INTO basicReports(title, body, author) VALUE(%s, %s, %s)", (title, body, session['username']))
 
-		#commit to DB
 		mysql.connection.commit()
-
-		#close connection
 		cur.close()
 
-		flash('Article Created', 'success')
+		flash('Report Created', 'success')
 
 		return redirect(url_for('dashboard'))
 
-	return render_template('add_report.html', form=form)
+	return render_template('add_basicReport.html', form=form)
 
-#edit article
-@app.route('/edit_report/<string:id>', methods=['GET', 'POST'])
+#edit basic report
+@app.route('/edit_basicReport/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
-def edit_report(id):
-	#create cursor
+def edit_basicReport(id):
 	cur = mysql.connection.cursor()
 
 	#get the article by id
-	result = cur.execute("SELECT * FROM articles WHERE id = %s", [id])
-
+	result = cur.execute("SELECT * FROM basicReports WHERE id = %s", [id])
 	article = cur.fetchone()
 
-	#get form
-	form = ArticleForm(request.form)
+	form = BasicReportForm(request.form)
 
 	#populate article form fields
 	form.title.data = article['title']
@@ -284,44 +259,265 @@ def edit_report(id):
 		title = request.form['title']
 		body = request.form['body']
 
-		#create cursor
+		cur = mysql.connection.cursor() #create cursor
+		cur.execute("UPDATE basicReports SET title=%s, body=%s WHERE id=%s", (title, body, id)) #execute
+		mysql.connection.commit() #commit to DB
+
+		cur.close() #close connection
+
+		flash('Report Updated', 'success')
+		return redirect(url_for('dashboard'))
+
+	return render_template('edit_basicReport.html', form=form)
+
+#delete basic article
+@app.route('/delete_basicReport/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_basicReport(id):
+    cur = mysql.connection.cursor() # Create cursor
+    cur.execute("DELETE FROM basicReports WHERE id = %s", [id]) # Execute
+
+    mysql.connection.commit() # Commit to DB
+    cur.close() #Close connection
+
+    flash('Report Deleted', 'success')
+    return redirect(url_for('all_reports'))
+
+#CustomerForm class
+class CustomerForm(Form):
+	CustID = StringField('Customer ID', [validators.Length(min=5, max=10)])
+	Fname = StringField('First Name', [validators.Length(min=1, max=20)])
+	Lname = StringField('Last Name', [validators.Length(min=1, max=30)])
+	phone = StringField('Phone', [validators.Length(min=10, max=15)])
+	email = StringField('Email', [validators.Length(min=6, max=50)])
+	#YTD_Sales = StringField('Phone', [validators.Length(min=5, max=20)])
+
+#add customer
+@app.route('/add_customer', methods=['Get','POST'])
+@is_logged_in
+def add_customer():
+	form = CustomerForm(request.form)
+	if request.method == 'POST' and form.validate():
+		CustID = form.CustID.data
+		Fname = form.Fname.data
+	 	Lname= form.Lname.data
+		phone = form.phone.data
+		email = form.email.data
+
 		cur = mysql.connection.cursor()
+		cur.execute("INSERT INTO customers(CustID, Fname, Lname, phone, email) VALUES(%s, %s, %s, %s, %s)", (CustID, Fname, Lname, phone, email))
 
-		#execute
-		cur.execute("UPDATE articles SET title=%s, body=%s WHERE id=%s", (title, body, id))
-
-		#commit to DB
 		mysql.connection.commit()
-
-		#close connection
 		cur.close()
 
-		flash('Article Updated', 'success')
+		flash('Customer Added', 'success')
+		return redirect(url_for('adding'))
+
+	return render_template('add_customer.html', form=form)
+
+#edit customer
+@app.route('/edit_customer/<string:CustID>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_customer(CustID):
+	cur = mysql.connection.cursor()
+
+	#get the article by id
+	result = cur.execute("SELECT * FROM customers WHERE CustID = %s", [id])
+	customer = cur.fetchone()
+
+	form = CustomerForm(request.form)
+
+	#populate article form fields
+	form.CustID.data = customer['CustID']
+	form.Fname.data = customer['Fname']
+	form.Lname.data = customer['Lname']
+	form.phone.data = customer['Phone']
+	form.email.data = customer['Email']
+
+	if request.method == 'POST' and form.validate():
+		CustID = form.CustID.data
+		Fname = form.Fname.data
+	 	Lname= form.Lname.data
+		phone = form.phone.data
+		email = form.email.data
+
+		cur = mysql.connection.cursor() #create cursor
+
+		cur.execute("UPDATE customers SET CustID=%s, Fname=%s, Lname=%s, phone=%s, email=%s WHERE CustID=%s", (CustID, Fname, Lname, phone, email, id))
+		mysql.connection.commit() #commit to DB
+
+		cur.close() #close connection
+
+		flash('Customer Updated', 'success')
+		return redirect(url_for('adding'))
+
+	return render_template('edit_customer.html', form=form)
+
+#delete customer
+@app.route('/delete_customer/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_customer(id):
+    cur = mysql.connection.cursor() # Create cursor
+
+    cur.execute("DELETE FROM customers WHERE id = %s", [id]) # Execute
+    mysql.connection.commit() # Commit to DB
+
+    cur.close() #Close connection
+
+    flash('Customer Deleted', 'success')
+    return redirect(url_for('adding'))
+
+#OrderForm class
+class OrderForm(Form):
+	ItemNumber = StringField('Item Number', [validators.Length(min=1, max=5)])
+	CustID = StringField('Customer ID', [validators.Length(min=1, max=5)])
+	OrderDate = StringField('Order Date (mm/dd/yyyy)', [validators.Length(min=6, max=15)])
+	Quantity = StringField('Quantity', [validators.Length(min=1, max=5)])
+
+#add order
+@app.route('/add_order', methods=['Get','POST'])
+@is_logged_in
+def add_order():
+	form = OrderForm(request.form)
+	if request.method == 'POST' and form.validate():
+		ItemNumber = form.ItemNumber.data
+		CustID = form.CustID.data
+	 	OrderDate = form.OrderDate.data
+		Quantity = form.Quantity.data
+
+		cur = mysql.connection.cursor()
+		cur.execute("INSERT INTO orders(ItemNumber, CustID, OrderDate, Quantity) VALUES(%s, %s, %s, %s)", (ItemNumber, CustID, OrderDate, Quantity))
+
+		mysql.connection.commit()
+		cur.close()
+
+		flash('Order Added', 'success')
+		return redirect(url_for('adding'))
+
+	return render_template('add_order.html', form=form)
+
+#edit customer
+@app.route('/edit_order/<string:id>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_order(id):
+	cur = mysql.connection.cursor()
+
+	#get the article by id
+	result = cur.execute("SELECT * FROM orders WHERE id = %s", [id])
+	orders = cur.fetchone()
+
+	#get form
+	form = CustomerForm(request.form)
+
+	#populate article form fields
+	form.ItemNumber.data = customer['ItemNumber']
+	form.CustID.data = customer['CustID']
+	form.OrderDate.data = customer['OrderDate']
+	form.Quantity.data = customer['Quantity']
+
+	if request.method == 'POST' and form.validate():
+		ItemNumber = form.ItemNumber.data
+		CustID = form.CustID.data
+	 	OrderDate = form.OrderDate.data
+		Quantity = form.Quantity.data
+
+		cur = mysql.connection.cursor() #create cursor
+
+		cur.execute("UPDATE orders SET ItemNumber=%s, CustID=%s, OrderDate=%s, Quantity=%s WHERE id=%s", (ItemNumber,CustID, OrderDate, Quantity, id))
+		mysql.connection.commit() #commit to DB
+
+		cur.close() #close connection
+
+		flash('Order Updated', 'success')
+		return redirect(url_for('adding'))
+
+	return render_template('edit_order.html', form=form)
+
+#delete customer
+@app.route('/delete_order/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_order(id):
+    cur = mysql.connection.cursor() # Create cursor
+
+    cur.execute("DELETE FROM orders WHERE id = %s", [id]) # Execute
+    mysql.connection.commit() # Commit to DB
+
+    cur.close() #Close connection
+
+    flash('Order Deleted', 'success')
+    return redirect(url_for('adding'))
+
+#InventoryReportForm class
+class InventoryReportForm(Form):
+	title = StringField('Title', [validators.Length(min=1, max=200)])
+	body = TextAreaField('Body', [validators.Length(min=30)])
+
+#add Inventory Report
+@app.route('/add_inventoryReport', methods=['Get','POST'])
+@is_logged_in
+def add_inventoryReport():
+	form = InventoryReportForm(request.form)
+	if request.method == 'POST' and form.validate():
+		title = form.title.data
+		body = form.body.data
+
+		cur = mysql.connection.cursor()
+		cur.execute("INSERT INTO inventoryReports(title, body, author) VALUE(%s, %s, %s)", (title, body, session['username']))
+
+		mysql.connection.commit()
+		cur.close()
+
+		flash('Report Created', 'success')
 
 		return redirect(url_for('dashboard'))
 
-	return render_template('edit_report.html', form=form)
+	return render_template('add_inventoryReport.html', form=form)
 
-#delete article
-@app.route('/delete_report/<string:id>', methods=['POST'])
+#edit inventory report
+@app.route('/edit_inventoryReport/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
-def delete_report(id):
-    # Create cursor
-    cur = mysql.connection.cursor()
+def edit_inventoryReport(id):
+	cur = mysql.connection.cursor()
 
-    # Execute
-    cur.execute("DELETE FROM articles WHERE id = %s", [id])
+	#get the article by id
+	result = cur.execute("SELECT * FROM inventoryReports WHERE id = %s", [id])
+	article = cur.fetchone()
 
-    # Commit to DB
-    mysql.connection.commit()
+	form = InventoryReportForm(request.form)
 
-    #Close connection
-    cur.close()
+	#populate article form fields
+	form.title.data = article['title']
+	form.body.data = article['body']
 
-    flash('Article Deleted', 'success')
+	if request.method == 'POST' and form.validate():
+		title = request.form['title']
+		body = request.form['body']
 
+		cur = mysql.connection.cursor() #create cursor
+
+		cur.execute("UPDATE inventoryReports SET title=%s, body=%s WHERE id=%s", (title, body, id)) #execute
+		mysql.connection.commit() #commit to DB
+
+		cur.close() #close connection
+
+		flash('Report Updated', 'success')
+		return redirect(url_for('dashboard'))
+
+	return render_template('edit_inventoryReport.html', form=form)
+
+#delete inventory article
+@app.route('/delete_inventoryReport/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_inventoryReport(id):
+    cur = mysql.connection.cursor() # Create cursor
+
+    cur.execute("DELETE FROM inventoryReports WHERE id = %s", [id]) # Execute
+    mysql.connection.commit() # Commit to DB
+
+    cur.close() #Close connection
+
+    flash('Report Deleted', 'success')
     return redirect(url_for('dashboard'))
-
 
 
 if __name__ == '__main__':
