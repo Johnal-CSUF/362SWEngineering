@@ -1,14 +1,45 @@
 # -*- coding: utf-8 -*-
 #Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie Ang
 #Basic Inventory and Customer program
-
 from __future__ import print_function
 
 import sqlite3
 from datetime import datetime
-
+#TEST123
 connection = sqlite3.connect ("parts.db")
 cursor = connection.cursor()
+
+######### CREATE EMPLOYEES TABLE #############
+sql_command = """
+CREATE TABLE IF NOT EXISTS EMPLOYEES (
+Employ_ID INT(10) NOT NULL,
+First VARCHAR(20) NOT NULL,
+Last VARCHAR(30) NOT NULL,
+Title VARCHAR(30) NOT NULL,
+Hire_date VARCHAR(10),
+Manager BIT NOT NULL DEFAULT (0), 
+PRIMARY KEY (Employ_ID));"""
+cursor.execute (sql_command)
+
+######## MANUAL ENTRY OF INVENTORY ITEMS #####
+sql_command = """INSERT OR REPLACE INTO EMPLOYEES (Employ_ID, First, Last, Title, Hire_date, Manager)
+VALUES (432, 'Dana', 'Shorts', 'CEO', '10/12/2017', 1); """
+cursor.execute(sql_command)
+sql_command = """INSERT OR REPLACE INTO EMPLOYEES (Employ_ID, First, Last, Title, Hire_date, Manager)
+VALUES (123, 'Helen', 'Bye', 'CCO', '10/12/2017', 1); """
+cursor.execute(sql_command)
+sql_command = """INSERT OR REPLACE INTO EMPLOYEES (Employ_ID, First, Last, Title, Hire_date, Manager)
+VALUES (456, 'Johnal', 'Bye', 'CTO', '10/12/2017', 1); """
+cursor.execute(sql_command)
+sql_command = """INSERT OR REPLACE INTO EMPLOYEES (Employ_ID, First, Last, Title, Hire_date, Manager)
+VALUES (789, 'Kavit', 'Bye', 'CFO', '10/12/2017', 1); """
+cursor.execute(sql_command)
+sql_command = """INSERT OR REPLACE INTO EMPLOYEES (Employ_ID, First, Last, Title, Hire_date, Manager)
+VALUES (223, 'Natalie', 'Bye', 'COO', '10/12/2017', 1); """
+cursor.execute(sql_command)
+sql_command = """INSERT OR REPLACE INTO EMPLOYEES (Employ_ID, First, Last, Title, Hire_date, Manager)
+VALUES (223, 'John', 'Bye', 'Programmer', '10/12/2017', 0); """
+cursor.execute(sql_command)
 
 ######### CREATE CUSTOMER TABLE #############
 sql_command = """
@@ -18,9 +49,10 @@ Fname VARCHAR(20) NOT NULL,
 Lname VARCHAR(30) NOT NULL,
 Phone VARCHAR(15) NOT NULL,
 Email VARCHAR(50),
-YTD_Sales VARCHAR(20),
-PRIMARY KEY(CustID) );"""
+YTD_Sales VARCHAR(20), 
+PRIMARY KEY(CustID));"""
 cursor.execute (sql_command)
+#NEED TO WORK OUT YTD SALES
 
 ######## CREATE INVENTORY TABLE #######
 sql_command = """
@@ -30,11 +62,11 @@ Name VARCHAR(15) NOT NULL,
 Units_In_Stock INT(5) NOT NULL,
 PRIMARY KEY (Item_Number),
 FOREIGN KEY (Item_Number) REFERENCES PRODUCTS (ItemNumber)
-FOREIGN KEY (Units_In_Stock) REFERENCES PRODUCTS (Available) );"""
+FOREIGN KEY (Units_In_Stock) REFERENCES PRODUCTS (Available));"""
 cursor.execute (sql_command)
 
 
-######## MANUAL ENTRY OF INVENTORY ITEMS ########
+######## MANUAL ENTRY OF INVENTORY ITEMS #####
 sql_command = """INSERT OR REPLACE INTO INVENTORY (Item_Number, Name, Units_In_Stock)
 VALUES (88222, 'Intake', 572); """
 cursor.execute(sql_command)
@@ -76,7 +108,7 @@ Available INT(5) NOT NULL,
 Class VARCHAR(10) NOT NULL,
 Origin VARCHAR(15) NOT NULL,
 Lead_Time VARCHAR(20) NOT NULL,
-PRIMARY KEY (ItemNumber) );"""
+PRIMARY KEY (ItemNumber));"""
 cursor.execute (sql_command)
 
 ###### MANUAL ENTRY OF PRODUCTS ######
@@ -113,27 +145,30 @@ cursor.execute(sql_command)
 
 ######## CREATE RECEIPT TABLE #######
 #TransactionID = YYMMDD+0001 (incrementing value that resets on new day)
-sql_command = """
-CREATE TABLE IF NOT EXISTS RECEIPTS (
-TransactionID INT(20) NOT NULL, 
-Date DATE NOT NULL,
-RegisterNumber INT(2) NOT NULL,
-Total DECIMAL(10, 2) NOT NULL,
-Available INT(5) NOT NULL,
-PaymentType VARCHAR(10) NOT NULL,
-PRIMARY KEY (TransactionID) );"""
-cursor.execute (sql_command)
+#sql_command = """
+#CREATE TABLE IF NOT EXISTS RECEIPTS (
+#TransactionID INT(20) NOT NULL, 
+#Date DATE NOT NULL,
+#RegisterNumber INT(2) NOT NULL,
+#Total DECIMAL(10, 2) NOT NULL,
+#Available INT(5) NOT NULL,
+#PaymentType VARCHAR(10) NOT NULL,
+#PRIMARY KEY (TransactionID));"""
+#cursor.execute (sql_command)
 
-####### CREATE ORDERS TABLE #######
+####### CREATE TRANSACTIONS TABLE #######
 sql_command = """
-CREATE TABLE IF NOT EXISTS ORDERS(
-ItemNumber INT(5) NOT NULL,
+CREATE TABLE IF NOT EXISTS TRANSACTIONS (
+transactionID VARCHAR(30) NOT NULL,
+Itemnum INT(10) NOT NULL,
 CustID INT(5) NOT NULL,
-OrderDate VARCHAR(10) Not NULL,
-Quantity INT(5) Not NULL,
-PRIMARY KEY (ItemNumber) );"""
+OrderDate VARCHAR(10) NOT NULL,
+Quantity INT(5) NOT NULL,
+Paid DECIMAL(10, 2) NOT NULL,
+PRIMARY KEY (transactionID),
+FOREIGN KEY (CustID) REFERENCES CUSTOMERS(CustID),
+FOREIGN KEY (Itemnum) REFERENCES PRODUCTS(ItemNumber));"""
 cursor.execute (sql_command)
-
 connection.commit()
 
 
@@ -152,10 +187,11 @@ def main():
         prev = True
         if cmd == 1:
             print("1 = Inventory Report")
-            print("2 = Customers Report")
+            print("2 = Customers Listing")
             print("3 = Products Report")
-            print("4 = Order Report")
-            print("5 = Previous Page")
+            print("4 = Transactions Record")
+            print("5 = Customer Transaction History")
+            print("6 = Previous Page")
             cmd = input(">> ")
             if cmd == 1:
                 inventory()
@@ -165,6 +201,8 @@ def main():
                 products()
             elif cmd == 4:
                 orders()
+            elif cmd == 5:
+                transactions()                
             else:
                 previous()
 
@@ -188,6 +226,7 @@ def main():
                 previous()
 
         elif cmd == 3:
+            bl = True
             print("1 = Delete Discontinued item from Inventory and Products")
             print("2 = List the item which are reached the threshold for reordering")
             print("3 = Previous Page")
@@ -247,7 +286,7 @@ def customers():
         
         cmd = int(input(">> "))
         if cmd == 1:      
-            print("------Full Customer Report------")
+            print("------Full Customer Listing------")
     
             cursor.execute("SELECT * FROM CUSTOMERS") 
             result = cursor.fetchall() 
@@ -255,7 +294,7 @@ def customers():
                 print (r)    
                 
         if cmd == 2:      
-            print("------Individual Customer Report------")
+            print("------Individual Customer Listing------")
             
             custId = raw_input('Please enter the existing client ID: ')
             cursor.execute('SELECT * FROM CUSTOMERS WHERE {idf}={my_id}'.\
@@ -264,11 +303,12 @@ def customers():
             if id_exists:
                 print('Customer Report: {}'.format(id_exists))
             else:
-                print('{} does not exist'.format(custId))        
+                print('{} does not exist'.format(custId))  
+                
+        else:
+            break
             
                                 
-            
-
 def products():
     print("------Product Report------")
     
@@ -276,14 +316,29 @@ def products():
     result = cursor.fetchall() 
     for r in result:
         print (r)
+
+        
 def orders():
-    print("———List of Orders———")
-    cursor.execute("SELECT * FROM ORDERS")
+    print("———List of Transactions———")
+    cursor.execute("SELECT * FROM TRANSACTIONS")
     result = cursor.fetchall()
     for r in result:
         print (r)
     
+    
+def transactions():
+    print("------Transaction History------")
 
+    id = int(input('Please enter customer ID: '))   
+    
+    cursor.execute('''SELECT TRANSACTIONS.OrderDate, PRODUCTS.Description, CUSTOMERS.Fname, CUSTOMERS.Lname, CUSTOMERS.Phone, TRANSACTIONS.Paid
+                    FROM CUSTOMERS, TRANSACTIONS, PRODUCTS WHERE CUSTOMERS.CustID = TRANSACTIONS.CustID AND TRANSACTIONS.Itemnum = PRODUCTS.ItemNumber AND CUSTOMERS.CustID = ?''', (id,))        
+    result = cursor.fetchall()
+    for r in result:
+        print (r)        
+        
+    
+    
 def ledger():
     print("------Daily Ledger------")
     
@@ -312,12 +367,14 @@ def addProducts():
     while running:
         print("1 = Add a new product") #...
         print("2 = Edit an exisitng product") #...
+        print("*****Press any other key to exit") #...
+        
         
         cmd = int(input(">> "))
         if cmd == 1:      
             print("------Please enter new product information------")
             
-            itemnum = raw_input('Enter Item Number: ')
+            itemnum = int(input('Enter Item Number: '))
             descrip = raw_input('Enter Item Description: ')
             cost = raw_input('Enter product price: ')  
             stock = raw_input('Enter available quantities: ')
@@ -333,40 +390,82 @@ def addProducts():
             
         if cmd == 2:      
             print("------Please enter the item number to edit------")
+            itemnum = int(input(': '))
             
-            itemnum = raw_input('Enter Item Number: ')
-            
-            print("What information would you like to udpate ? Desc, Price, Avail, Class, Origin, or lead Time")
+            print("What information would you like to udpate ? Desc, Price, Avail, Class, Orgn, or lead")
             choice = raw_input(': ')
             
             if choice == 'Desc':
-                Desc = raw_input('Enter a new product description: ')
-                sql_command = "UPDATE PRODUCTS SET Description = 'Desc' WHERE ItemNumber = 'itemnum'"
-                cursor.execute (sql_command)                
-                connection.commit()             
-             
-             
-                    
+                newDesc = raw_input('Enter a new product description: ')
+                cursor.execute ("UPDATE PRODUCTS SET Description = ? WHERE ItemNumber = ?", [newDesc, itemnum])                
+                connection.commit()     
+                
+            elif choice == 'Price':                   
+                newPrice = raw_input('Enter a new product price: ')
+                cursor.execute ("UPDATE PRODUCTS SET Price = ? WHERE ItemNumber = ?", [newPrice, itemnum])                
+                connection.commit()
+                
+                
+            elif choice == 'Avail':
+                newAvail = raw_input('Enter a new product availability: ')
+                cursor.execute ("UPDATE PRODUCTS SET Available = ? WHERE ItemNumber = ?", [newAvail, itemnum])                
+                connection.commit() 
+                
+            elif choice == 'Class':
+                newClass = raw_input('Enter a new product class: ')
+                cursor.execute ("UPDATE PRODUCTS SET Class = ? WHERE ItemNumber = ?", [newClass, itemnum])                
+                connection.commit()       
+                
+            elif choice == 'Orgn':
+                newOrigin = raw_input('Enter a new product origin: ')
+                cursor.execute ("UPDATE PRODUCTS SET Origin = ? WHERE ItemNumber = ?", [newOrigin, itemnum])                
+                connection.commit()                  
+                
+            elif choice == 'Lead':
+                newlead = raw_input('Enter a new product lead time: ')
+                cursor.execute ("UPDATE PRODUCTS SET Lead_Time = ? WHERE ItemNumber = ?", [newlead, itemnum])                
+                connection.commit()  
+                
+            else:
+                running = False
             
-            print ("The product has been added to the database")
+        
+            print ("*The product has been updated*")
+            selection = raw_input('Update or add another product? (Y)es, (N)o: ')
+            
+            
+            if selection == 'Y':
+                previous()
+            else:
+                running = False
+            
+        else:
+            running = False
             
                 
 
-def addOrder():
-    print("------ADD Orders------")
+#def addOrder():
+ #   print("------ADD Orders------")
     
-    custId = input('Enter client ID: ')
-    item = int(input('Enter item number: '))
-    date = input('Enter order date (MMDDYYYY): ')
-    quant = int(input('Enter quantities of the item: '))
-    print ("The order has been added to the database")
-    sql_command = "INSERT INTO ORDERS VALUES (?, ?, ?, ?);"
-    cursor.execute(sql_command, (item, custId, date, quant))
+  #  custId = input('Enter client ID: ')
+   # item = int(input('Enter item number: '))
+    #date = input('Enter order date (MMDDYYYY): ')
+    #quant = input('Enter quantities of the item: ')
+    #cost = input('Enter in cost of item: ')
+    
+    #add transaction to orders table    
+    #sql_command = "INSERT INTO TRANSACTIONS VALUES (?, ?, ?, ?, ?);"
+    #cursor.execute(sql_command, (item, custId, date, quant, cost))
+    #connection.commit()        
+    #print ("The order has been added to the database")
+    
     
     #decrease the Units_in_Stock
-    units = cursor.execute("SELECT Units_In_Stock FROM INVENTORY WHERE Item_Number = ?", (item,)).fetchone()[0]
-    units = units - quant
-    cursor.execute("UPDATE INVENTORY SET Units_In_Stock = ? WHERE Item_Number = ?", [units, item])
+    #units = cursor.execute("SELECT Units_In_Stock FROM INVENTORY WHERE Item_Number = ?", (item,)).fetchone()[0]
+    #units = units - quant
+    #cursor.execute("UPDATE INVENTORY SET Units_In_Stock = ? WHERE Item_Number = ?", [units, item])
+    
+    
 
 def SoldOut():
     print("———Items reached the threshold for reordering———")
@@ -379,7 +478,7 @@ def Discontinued():
         print("Input the item number discontinued item")
         item = input('Enter item number: ')
         cursor.execute("DELETE FROM INVENTORY WHERE Item_Number = ?", (item,))
-        cursor.execute("DELETE FROM PRODUCTS WHERE ItemNumber = ?", (item,))
+        cursor.execute("DELETE FROM PRODUCTS WHERE Item_Number = ?", (item,))
 
 def newSale():
     products_table = 'PRODUCTS'
@@ -389,6 +488,7 @@ def newSale():
     purchaseList = []
     print("--------New Sale-------")
     timestamp = datetime.now()
+    date = datetime.today().strftime("%m/%d/%Y")
     transactionID = (timestamp.strftime('%y%m%d%H%M%S%f'))
     print ("Transaction ID: " +(transactionID))
     custID = input("Enter customer phone number (0 to decline): ")
@@ -408,6 +508,22 @@ def newSale():
             purchaseList.append(itemToBuy)
         else:
             print('{} does not exist'.format(itemToBuy))
+            
+        price = cursor.execute("SELECT Price FROM PRODUCTS WHERE PRODUCTS.ItemNumber = ?", (itemToBuy,)).fetchone()[0]   
+        #add transaction to transactions table    
+        sql_command = "INSERT INTO TRANSACTIONS VALUES (?, ?, ?, ?, ?, ?);"
+        cursor.execute(sql_command, (transactionID, itemToBuy, custID, date, qty, price))
+        connection.commit()        
+              
+        #decrease the Units_in_Stock\
+        units = cursor.execute("SELECT Units_In_Stock FROM INVENTORY WHERE Item_Number = ?", (itemToBuy,)).fetchone()[0]
+        units = units - qty
+        cursor.execute("UPDATE INVENTORY SET Units_In_Stock = ? WHERE Item_Number = ?", [qty, itemToBuy])   
+        
+        print ("The transaction has been added to the database and items removed from stock")
+        
+     
+            
 
     #once all qty and items have been entered, use list to pull pricing from database,
     #and multiply by quantity from list as well to come up with total and breakdown for receipt.
