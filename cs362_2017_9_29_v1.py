@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Dana Shorts, Johnal Leifsson, Helen, Kavit, Natalie
+#Dana Shorts, Johnal Leifsson, Helen Chang, Kavit Meghpara, Natalie Ang
 #Basic Inventory and Customer program
 from __future__ import print_function
 
@@ -181,7 +181,8 @@ def main():
         print("3 = Discontinued, threshold for reordering")
         print("4 = Daily Ledger")
         print("5 = New Sale")
-        print("6 = Exit program")
+        print("6 = End of Day Report")
+        print("7 = Exit program")
         cmd = int(input(">> "))
         prev = True
         if cmd == 1:
@@ -244,8 +245,12 @@ def main():
         elif cmd == 5:
             # call new sale function
             newSale()
-            
+
         elif cmd == 6:
+            # End of day report
+            endofday()
+
+        elif cmd == 7:
             # call the end function
             end()
             break
@@ -535,16 +540,37 @@ def end():
     print("ending Inventory System.....")
     running = False
 
+def endofday():
+    numcash = 0
+    numcard = 0
+    print("----------------Total Cash Sale----------------")
+    cursor.execute("SELECT * FROM RECEIPTS WHERE PaymentType == 'CASH'")
+    result = cursor.fetchall()
+    for c in result:
+        numcash = numcash + 1
+        print(c)
+    cursor.execute("SELECT SUM(Total) FROM RECEIPTS WHERE PaymentType == 'CASH'")
+    cashresult = cursor.fetchall()
+    print ("\nTotal Cash Amount Sales : $", cashresult[0][0])
+    print("Total Number of Cash Sale ", numcash)
+    print("----------------Total Credit/debit Sale----------------")
+    cursor.execute("SELECT * FROM RECEIPTS WHERE PaymentType == 'CARD'")
+    result = cursor.fetchall()
+    for c in result:
+        numcard = numcard + 1
+        print(c)
+    cursor.execute("SELECT SUM(Total) FROM RECEIPTS WHERE PaymentType == 'CARD'")
+    cardresult = cursor.fetchall()
+    print("\nTotal Card Amount Sales : $", cardresult[0][0])
+    print("Total Number of Card Sale ", numcard)
+    #print(card)
+    #print("\n")
+    print("----------------Total Items “damaged out”----------------")
+    print ("\n\n")
+
+
 def previous():
     prev = False
-
-def cashsales():
-    global cashsale
-    cashsale += 1
-
-def cashsaletotals () :
-    print("--------Cash Sales Totals------------")
-    print(cashsale)
 
 
 # -----------------------------------------------
