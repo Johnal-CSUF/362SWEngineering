@@ -145,16 +145,16 @@ cursor.execute(sql_command)
 
 ######## CREATE RECEIPT TABLE #######
 #TransactionID = YYMMDD+0001 (incrementing value that resets on new day)
-sql_command = """
-CREATE TABLE IF NOT EXISTS RECEIPTS (
-TransactionID INT(20) NOT NULL, 
-Date DATE NOT NULL,
-RegisterNumber INT(2) NOT NULL,
-Total DECIMAL(10, 2) NOT NULL,
-Available INT(5) NOT NULL,
-PaymentType VARCHAR(10) NOT NULL,
-PRIMARY KEY (TransactionID));"""
-cursor.execute (sql_command)
+#sql_command = """
+#CREATE TABLE IF NOT EXISTS RECEIPTS (
+#TransactionID INT(20) NOT NULL, 
+#Date DATE NOT NULL,
+#RegisterNumber INT(2) NOT NULL,
+#Total DECIMAL(10, 2) NOT NULL,
+#Available INT(5) NOT NULL,
+#PaymentType VARCHAR(10) NOT NULL,
+#PRIMARY KEY (TransactionID));"""
+#cursor.execute (sql_command)
 
 ####### CREATE TRANSACTIONS TABLE #######
 sql_command = """
@@ -449,16 +449,16 @@ def addProducts():
     #cost = input('Enter in cost of item: ')
     
     #add transaction to orders table    
-    sql_command = "INSERT INTO TRANSACTIONS VALUES (?, ?, ?, ?, ?);"
-    cursor.execute(sql_command, (item, custId, date, quant, cost))
-    connection.commit()        
-    print ("The order has been added to the database")
+    #sql_command = "INSERT INTO TRANSACTIONS VALUES (?, ?, ?, ?, ?);"
+    #cursor.execute(sql_command, (item, custId, date, quant, cost))
+    #connection.commit()        
+    #print ("The order has been added to the database")
     
     
     #decrease the Units_in_Stock
-    units = cursor.execute("SELECT Units_In_Stock FROM INVENTORY WHERE Item_Number = ?", (item,)).fetchone()[0]
-    units = units - quant
-    cursor.execute("UPDATE INVENTORY SET Units_In_Stock = ? WHERE Item_Number = ?", [units, item])
+    #units = cursor.execute("SELECT Units_In_Stock FROM INVENTORY WHERE Item_Number = ?", (item,)).fetchone()[0]
+    #units = units - quant
+    #cursor.execute("UPDATE INVENTORY SET Units_In_Stock = ? WHERE Item_Number = ?", [units, item])
     
     
 
@@ -504,15 +504,12 @@ def newSale():
         else:
             print('{} does not exist'.format(itemToBuy))
             
-         
-         
         price = cursor.execute("SELECT Price FROM PRODUCTS WHERE PRODUCTS.ItemNumber = ?", (itemToBuy,)).fetchone()[0]   
         #add transaction to transactions table    
         sql_command = "INSERT INTO TRANSACTIONS VALUES (?, ?, ?, ?, ?, ?);"
         cursor.execute(sql_command, (transactionID, itemToBuy, custID, date, qty, price))
         connection.commit()        
-            
-            
+              
         #decrease the Units_in_Stock\
         units = cursor.execute("SELECT Units_In_Stock FROM INVENTORY WHERE Item_Number = ?", (itemToBuy,)).fetchone()[0]
         units = units - qty
