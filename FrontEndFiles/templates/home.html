@@ -1,21 +1,16 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	<div id="myCarousel" class="carousel slide" data-ride="carousel">
-			 <div class="carousel-item active">
-				 <img class="first-slide" src="https://cdn.yourstory.com/wp-content/uploads/2016/12/Inventory-credit-shutterstock.jpg" width="1150" height="375" alt="First slide">
-				 <div class="container">
-					 <div class="carousel-caption d-none d-md-block text-left">
-						 <h1>Welcome to MyInventoryApp</h1>
-						 <p>Here you can access your inventory then edit, add or delete items in it.</p>
-						 {% if session.logged_in == NULL %}
-							 <a href="/register" class="btn btn-primary">Register</a>
-							 <a href="/login" class="btn btn-success">Login</a>
-						 {% endif %}
-					 </div>
-				 </div>
-			 </div>
- 	 </div>
+	<section id="showcase">
+		<div class="ptext">
+				<h1>Welcome to MyInventoryApp</h1>
+				<p>Here you can access your inventory then edit, add or delete items in it.</p>
+				{% if session.logged_in == NULL %}
+					<a href="/register" class="btn btn-primary">Register</a>
+					<a href="/login" class="btn btn-success">Login</a>
+				{% endif %}
+		</div>
+	</section>
 
 	<div class="row">
 	<div class="col-lg-4">
@@ -34,4 +29,24 @@
 		<p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
 	</div>
 </div>
+
+<style type = "text/css">
+#showcase{
+  background-image:url('https://cdn.yourstory.com/wp-content/uploads/2016/12/Inventory-credit-shutterstock.jpg');
+  background-size:cover;
+  background-position:center;
+  height:400px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.ptext{
+  background: hsla(0, 100%, 100%, 0.6);
+  color:#000;
+  padding:10px;
+}
+</style>
 {% endblock %}
