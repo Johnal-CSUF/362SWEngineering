@@ -1,52 +1,143 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<body>
 	<section id="showcase">
 		<div class="ptext">
-				<h1>Welcome to MyInventoryApp</h1>
+				<h1>Welcome to <span class="primary-text">MyInventoryApp</span></h1>
 				<p>Here you can access your inventory then edit, add or delete items in it.</p>
 				{% if session.logged_in == NULL %}
-					<a href="/register" class="btn btn-primary">Register</a>
-					<a href="/login" class="btn btn-success">Login</a>
+					<a href="/register" class="btn btn-info">Register</a>
+					<a href="/login" class="btn btn-default">Login</a>
 				{% endif %}
 		</div>
 	</section>
 
-	<div class="row">
-	<div class="col-lg-4">
-		<h2>Heading</h2>
-		<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-		<p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+<br>
+<section id="features">
+	<div class="container">
+		<div class="row center-xs center-sm center-md center-lg">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<h2>Core Features</h2>
+				<p>What's Included</p>
+				<div class="row center-xs center-sm center-md center-lg">
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<img src="{{url_for('static', filename='inventory.svg')}}">
+						<h4>Inventory Management</h4>
+						<p>Simple and easy inventory management in real-time.</p>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<img src="{{url_for('static', filename='support.png')}}">
+
+						<h4>Free Support</h4>
+						<p>You can always rely on our team to answer questions or help solve any problem you encounter.</p>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<img src="{{url_for('static', filename='order.png')}}">
+						<h4>Purchase Order</h4>
+						<p>Easy to replenish inventory and order more stock.</p>
+					</div>
+				</div>
+
+				<div class="row center-xs center-sm center-md center-lg">
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<img src="{{url_for('static', filename='customer.svg')}}">
+
+						<h4>Customer Accounts</h4>
+						<p>Regulate customer accounts along with their purchase history, contacts and notes.</p>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<img src="{{url_for('static', filename='finance.png')}}">
+						<h4>Financial Reports</h4>
+						<p>Create reports on inventory, sales and services.</p>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<img src="{{url_for('static', filename='user.svg')}}">
+						<h4>User Management</h4>
+						<p>Faciliate what your employees or users are able to see and do.</p>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="col-lg-4">
-		<h2>Heading</h2>
-		<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-		<p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-	</div>
-	<div class="col-lg-4">
-		<h2>Heading</h2>
-		<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-		<p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-	</div>
-</div>
+</section>
+</body>
 
 <style type = "text/css">
+body{
+  font-family:'Open-sans', sans-serif;
+  font-size:17px;
+  line-height:1.5em;
+  margin:0;
+  padding:0;
+	background-color:#F8F8F8;
+}
+
+img{
+  width:100%;
+}
+
+.primary-text{
+  color:#6EC4DB;
+}
 #showcase{
-  background-image:url('https://cdn.yourstory.com/wp-content/uploads/2016/12/Inventory-credit-shutterstock.jpg');
+  background-image:url("{{url_for('static', filename='comp.jpeg')}}");
   background-size:cover;
-  background-position:center;
-  height:400px;
+  height:650px;
+	width:100%;
+	border-bottom:1px solid #6EC4DB;
+
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
 }
-
-.ptext{
-  background: hsla(0, 100%, 100%, 0.6);
-  color:#000;
-  padding:10px;
+#showcase h1{
+	font-weight:bold;
 }
+.ptext{
+  background: #333;
+  color:#fff;
+	border-radius:90px;
+  padding:15px;
+	opacity:0.9;
+}
+
+#boxes{
+  margin-top:20px;
+}
+
+#boxes .box{
+  float:left;
+  text-align: center;
+  width:30%;
+  padding: 10px;
+}
+
+img{
+  width:70px;
+}
+
+#features{
+	text-align:center;
+}
+#features h2{
+  font-size:35px;
+  margin:0;
+  padding-bottom:10px;
+}
+
+#features p{
+  color:#888;
+  margin:0;
+  margin-bottom:40px;
+}
+
+#features .fa{
+  font-size:60px;
+  color:#56a79a;
+}
+
 </style>
 {% endblock %}

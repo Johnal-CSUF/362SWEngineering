@@ -2,11 +2,37 @@
 
 {% block body %}
 <div class="container-fluid">
-    <h1>Customer and Product Info</h1>
+    <h1>End of Day Report</h1>
     <hr>
     <div class="row">
+      <h3>Current Sale</h3>
+          <table class="table table-striped">
+            <tr>
+              <th>Item Number</th>
+              <th>Customer ID</th>
+              <th>Order Date</th>
+              <th>Quantity</th>
+              <th> </th>
+              <th> </th>
+            </tr>
+            {%for order in orders%}
+              <tr>
+                <td>{{order.ItemNumber}}</td>
+                <td>{{order.CustID}}</td>
+                <td>{{order.OrderDate}}</td>
+                <td>{{order.Quantity}}</td>
+                <td><a href="edit_sale/{{order.ItemNumber}}" class="btn btn-default pull-right">Edit</a></td>
+                <td>
+                  <form action="{{url_for('delete_sale', ItemNumber=order.ItemNumber)}}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
 
-      <h3>Current Customers  <a class="btn btn-info" href="/add_customer">Add Customer</a></h3>
+      <h3>Current Customers</h3>
           <table class="table table-striped">
             <tr>
               <th>Customer ID</th>
@@ -36,7 +62,7 @@
           </table>
 
           <br>
-          <h3>Current Products  <a class="btn btn-info" href="/add_product">Add Product</a></h3>
+          <h3>Current Products</h3>
               <table class="table table-striped">
                 <tr>
                   <th>Item Number</th>
@@ -70,11 +96,11 @@
                 {% endfor %}
               </table>
           <br>
+
+      <h3>Inventory</h3>
+          <div class="table-responsive">
+
+          </div>
         </div>
       </div>
-<style type = "text/css">
-  body{
-    background-color:#fff;
-  }
-</style>
 {% endblock %}
