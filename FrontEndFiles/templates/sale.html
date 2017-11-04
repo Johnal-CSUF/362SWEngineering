@@ -1,0 +1,36 @@
+{%extends 'other_layout.html'%}
+
+{% block body %}
+<h1>Add and View Sales</h1>
+<hr>
+<div class="row">
+      <table class="table table-striped">
+        <h3>Current Sale <a class="btn btn-info" href="/add_sale">Add Sale</a></h3>
+        <tr>
+          <th>Item Number</th>
+          <th>Customer ID</th>
+          <th>Order Date</th>
+          <th>Quantity</th>
+          <th> </th>
+          <th> </th>
+        </tr>
+        {%for order in orders%}
+          <tr>
+            <td>{{order.ItemNumber}}</td>
+            <td>{{order.CustID}}</td>
+            <td>{{order.OrderDate}}</td>
+            <td>{{order.Quantity}}</td>
+            <td><a href="edit_sale/{{order.CustID}}" class="btn btn-default">Edit</a></td>
+            <td>
+              <form action="{{url_for('delete_sale', ItemNumber=order.ItemNumber)}}" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="submit" value="Delete" class="btn btn-danger">
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+<style media="screen" type="text/css">
+</style>
+{%endblock%}

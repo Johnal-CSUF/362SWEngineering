@@ -1,43 +1,255 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	    <section class="jumbotron">
-	      <div class="container">
-	        <h1 class="jumbotron-heading">About Us</h1>
-	        <p class="lead">This application is an inventory system created by 5 computer science students that were brought together by one professor to make an awesome application that is worthy of an A.</p>
-	      </div>
-	    </section>
+<br>
+	<div class="container">
+    <div class="row">
+      <div class="heading-title text-center">
+        <h2 class="text-uppercase">Meet the Team </h3>
+					<p class="half-txt">Our story begins in August of 2017 when five random computer science students were grouped together because of their desire to learn python. The beginning of this process was odd, but the five of us pulled through as the weeks go by. The result of this 11+ week long of collaboration and hard work has resulted in this inventory management web application. </p>
+			</div>
+			<hr>
 
-	<div class="row">
-	<div class="col-lg-4">
-		<img class="rounded-circle" src="http://static.pokemonpets.com/images/monsters-images-800-800/2197-Shiny-Umbreon.png" alt="Generic placeholder image" width="140" height="140">
-		<h2>Dana</h2>
-		<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-		<p><a class="btn btn-primary" href="https://github.com/csudhtoro" role="button">View Github</a></p>
-	</div><!-- /.col-lg-4 -->
-	<div class="col-lg-4">
-		<img class="rounded-circle" src="https://i.pinimg.com/originals/be/93/18/be93189ce05f05d687a336d9d7611a91.png" alt="Generic placeholder image" width="140" height="140">
-		<h2>Helen Chang</h2>
-		<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-		<p><a class="btn btn-primary" href="https://github.com/seochang" role="button">View Github</a></p>
-	</div><!-- /.col-lg-4 -->
-	<div class="col-lg-4">
-		<img class="rounded-circle" src="https://cdn.bulbagarden.net/upload/thumb/b/bb/135Jolteon.png/250px-135Jolteon.png" alt="Generic placeholder image" width="140" height="140">
-		<h2>Natalie Ang</h2>
-		<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-		<p><a class="btn btn-primary" href="https://github.com/AngNet" role="button">View Github</a></p>
-	</div><!-- /.col-lg-4 -->
-	<div class="col-lg-4">
-		<img class="rounded-circle" src="http://vignette4.wikia.nocookie.net/project-pokemon/images/f/fc/Vaporeon.png/revision/latest?cb=20161025174042" alt="Generic placeholder image" width="140" height="140">
-		<h2>Johnal Leifsson</h2>
-		<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-		<p><a class="btn btn-primary" href="https://github.com/Johnal-CSUF" role="button">View Github</a></p>
-	</div><!-- /.col-lg-4 -->
-	<div class="col-lg-4">
-		<img class="rounded-circle" src="https://cdn.bulbagarden.net/upload/thumb/d/dd/136Flareon.png/250px-136Flareon.png" alt="Generic placeholder image" width="140" height="140">
-		<h2>Kavit</h2>
-		<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-		<p><a class="btn btn-primary" href="https://github.com/kitkav" role="button">View Github</a></p>
-	</div><!-- /.col-lg-4 -->
-</div><!-- /.row -->
+			<div class="col-md-4 col-sm-4">
+			 <div class="team-member">
+			  <div class="team-img">
+			   <img src="{{url_for('static', filename='nat.jpeg')}}" class="img-responsive">
+			  </div>
+			  <div class="team-hover">
+			   <div class="desk">
+			    <h4>Hey! Hey! Hey!</h4>
+			    <p>I'm a food loving programmer that likes to play video games, learn new languages, and sleep.</p>
+			   </div>
+			   <div class="s-link">
+					<a class="btn btn-info" href="https://github.com/AngNet" role="button">View Github</a>
+			   </div>
+			  </div>
+			 </div>
+			 <div class="team-title">
+			  <h5>Natalie Ang</h5>
+			  <span>founder &amp; ceo</span>
+			 </div>
+			</div>
+
+			<div class="col-md-4 col-sm-4">
+			 <div class="team-member">
+			  <div class="team-img">
+			   <img src="{{url_for('static', filename='dana.jpeg')}}" class="img-responsive">
+			  </div>
+			  <div class="team-hover">
+			   <div class="desk">
+			    <h4>Hi There!</h4>
+			    <p> I enjoy meeting new people and finding ways to help them have an uplifting experience. I am dedicated, outgoing, and a team player.</p>
+			   </div>
+			   <div class="s-link">
+					<a class="btn btn-info" href="https://github.com/csudhtoro" role="button">View Github</a>
+			   </div>
+			  </div>
+			 </div>
+			 <div class="team-title">
+			  <h5>Dana</h5>
+			  <span>founder &amp; ceo</span>
+			 </div>
+			</div>
+
+			<div class="col-md-4 col-sm-4">
+			 <div class="team-member">
+					<div class="team-img">
+						<img src="{{url_for('static', filename='chang.jpeg')}}" class = "img-responsive">
+					</div>
+				<div class="team-hover">
+					 <div class="desk">
+								<h4>Hello World</h4>
+								<p>“I am a diligent individual with a lot of energy to accomplish my goals. I enjoy new challenges to push me further.</p>
+					 </div>
+						 <div class="s-link">
+								 <a class="btn btn-info" href="https://github.com/seochang" role="button">View Github</a>
+						 </div>
+					</div>
+				 </div>
+					 <div class="team-title">
+							<h5>Helen Chang</h5>
+							<span>HR Manager</span>
+					 </div>
+					</div>
+
+						<div class="col-md-4 col-sm-4">
+						 <div class="team-member">
+						  <div class="team-img">
+						   <img src="{{url_for('static', filename='jon.jpeg')}}" class="img-responsive">
+						  </div>
+						  <div class="team-hover">
+						   <div class="desk">
+						    <h4>What's new?</h4>
+						    <p>I enjoy reading, and the knowledge that my reading gives me has strengthened my skills and presentation abilities.</p>
+						   </div>
+						   <div class="s-link">
+						    <a class="btn btn-info" href="https://github.com/Johnal-CSUF" role="button">View Github</a>
+						   </div>
+						  </div>
+						 </div>
+						 <div class="team-title">
+						  <h5>Johnal Leifsson</h5>
+						  <span>HR Manager</span>
+						 </div>
+						</div>
+
+						<div class="col-md-4 col-sm-4">
+						 <div class="team-member">
+							<div class="team-img">
+							 <img src="{{url_for('static', filename='kav.jpeg')}}" class="img-responsive">
+							</div>
+							<div class="team-hover">
+							 <div class="desk">
+								<h4>What's up?</h4>
+								<p>People find me to be an upbeat, self-motivated team player with excellent communication skills.</p>
+							 </div>
+							 <div class="s-link">
+								<a class="btn btn-info" href="https://github.com/kitkav" role="button">View Github</a>
+							 </div>
+							</div>
+						 </div>
+						 <div class="team-title">
+							<h5>Kavit</h5>
+							<span>Marketing Manager</span>
+						 </div>
+						</div>
+
+		</div>
+	</div>
+
+<style type = "text/css">
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900,900italic);
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    line-height: 1.5;
+    color: #323232;
+    font-size: 30px;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+		background-color:#F8F8F8;
+}
+.heading-title {
+    margin-bottom: 100px;
+}
+.text-center {
+    text-align: center;
+}
+.heading-title h3 {
+    margin-bottom: 0;
+    letter-spacing: 2px;
+    font-weight: normal;
+}
+.p-top-30 {
+    padding-top: 30px;
+}
+.half-txt {
+    width: 60%;
+    margin: 0 auto;
+    display: inline-block;
+    line-height: 30px;
+    color: #7e7e7e;
+}
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.team-member, .team-member .team-img {
+    position: relative;
+}
+.team-member {
+    overflow: hidden;
+}
+.team-member, .team-member .team-img {
+    position: relative;
+}
+
+.team-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 0;
+    border: 20px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.90);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.team-member:hover .team-hover .desk {
+    top: 40%;
+}
+.team-member:hover .team-hover, .team-member:hover .team-hover .desk, .team-member:hover .team-hover .s-link {
+    opacity: 1;
+}
+.team-hover .desk {
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    opacity: 0;
+    -webkit-transform: translateY(-55%);
+    -ms-transform: translateY(-55%);
+    transform: translateY(-55%);
+    -webkit-transition: all 0.3s 0.2s;
+    transition: all 0.3s 0.2s;
+    padding: 0 20px;
+}
+.desk, .desk h4, .team-hover .s-link a {
+    text-align: center;
+    color: #222;
+}
+.team-member:hover .team-hover .s-link {
+    bottom: 10%;
+}
+.team-member:hover .team-hover, .team-member:hover .team-hover .desk, .team-member:hover .team-hover .s-link {
+    opacity: 1;
+}
+.team-hover .s-link {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+    text-align: center;
+    -webkit-transform: translateY(45%);
+    -ms-transform: translateY(45%);
+    transform: translateY(45%);
+    -webkit-transition: all 0.3s 0.2s;
+    transition: all 0.3s 0.2s;
+    font-size: 35px;
+}
+.desk, .desk h4, .team-hover .s-link a {
+    text-align: center;
+    color: #222;
+}
+.team-member .s-link a {
+    margin: 0 10px;
+    color: #333;
+    font-size: 16px;
+}
+.team-title {
+    position: static;
+    padding: 20px 0;
+    display: inline-block;
+    letter-spacing: 2px;
+    width: 100%;
+}
+.team-title h5 {
+		font-weight: bold;
+		font-size: 16px;
+    margin-bottom: 0px;
+    display: block;
+    text-transform: uppercase;
+}
+.team-title span {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #a5a5a5;
+    letter-spacing: 1px;
+}
+
+</style>
 {% endblock %}
