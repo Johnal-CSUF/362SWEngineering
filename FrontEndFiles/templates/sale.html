@@ -1,4 +1,4 @@
-{%extends 'other_layout.html'%}
+{%extends 'layout.html'%}
 
 {% block body %}
 <h1>Add and View Sales</h1>
@@ -20,7 +20,7 @@
             <td>{{order.CustID}}</td>
             <td>{{order.OrderDate}}</td>
             <td>{{order.Quantity}}</td>
-            <td><a href="edit_sale/{{order.CustID}}" class="btn btn-default">Edit</a></td>
+            <td><a href="edit_sale/{{order.CustID}}" class="btn btn-default pull-right">Edit</a></td>
             <td>
               <form action="{{url_for('delete_sale', ItemNumber=order.ItemNumber)}}" method="post">
                 <input type="hidden" name="_method" value="DELETE">
