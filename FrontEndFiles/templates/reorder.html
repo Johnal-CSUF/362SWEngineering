@@ -1,4 +1,4 @@
-{% extends 'other_layout.html' %}
+{% extends 'layout.html' %}
 
 {% block body %}
 
@@ -15,7 +15,6 @@
                   <th>Available</th>
                   <th>Class</th>
                   <th>Origin</th>
-                  <th>Lead Time</th>
                   <th> </th>
                   <th> </th>
 
@@ -28,7 +27,6 @@
                     <td>{{product.Available}}</td>
                     <td>{{product.Class}}</td>
                     <td>{{product.Origin}}</td>
-                    <td>{{product.Lead_Time}}</td>
                     <td><a href="order_form/{{product.ItemNumber}}" class="btn btn-info pull-right">Reorder</a></td>
                   </tr>
                 {% endfor %}

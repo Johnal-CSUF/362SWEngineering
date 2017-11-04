@@ -1,4 +1,4 @@
-{% extends 'other_layout.html' %}
+{% extends 'layout.html' %}
 
 {% block body %}
   <h1>Edit Customer Information</h1>
@@ -19,6 +19,6 @@
         <div class="form-group">
       {{render_field(form.email, class_="form-control")}}
     </div>
-    <p><input type="submit" class="btn btn-primary" value="Submit"></p>
+    <p><input class="btn btn-primary"  type="submit" value="Submit"></p>
   </form>
 {% endblock %}

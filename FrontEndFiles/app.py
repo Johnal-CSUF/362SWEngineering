@@ -115,9 +115,41 @@ def user_list():
 		return render_template('user_list.html', users=users)
 	else:
 		msg = 'No Users Found'
-		return render_template('adding.html', msg = msg)
+		return render_template('user_list.html', msg = msg)
 
 	cur.close()
+
+#edit article
+@app.route('/edit_user/<string:id>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_user(id):
+	cur = mysql.connection.cursor()
+	result = cur.execute("SELECT * FROM users WHERE id = %s", [id])
+
+	user = cur.fetchone()
+	form = RegisterForm(request.form)
+
+	form.name.data = user['name']
+	form.username.data = user['username']
+	form.email.data = user['email']
+
+	if request.method == 'POST' and form.validate():
+		name = request.form['name']
+		username = request.form['username']
+		email = request.form['email']
+
+		cur = mysql.connection.cursor()
+
+		cur.execute("UPDATE users SET name=%s, username=%s email=%s WHERE id=%s", (name, username, email, id))
+		mysql.connection.commit()
+
+		cur.close()
+		flash('User Updated', 'success')
+
+		return redirect(url_for('user_list'))
+
+	return render_template('edit_user.html', form=form)
+
 
 #delete user
 @app.route('/delete_user/<string:id>', methods=['POST'])
@@ -214,13 +246,13 @@ def add_customer():
 def edit_customer(CustID):
 	cur = mysql.connection.cursor()
 
-	#get the article by id
+	#get the customer by id
 	result = cur.execute("SELECT * FROM customers WHERE CustID = %s", [CustID])
 	customer = cur.fetchone()
 
 	form = CustomerForm(request.form)
 
-	#populate article form fields
+	#populate customer form fields
 	form.CustID.data = customer['CustID']
 	form.Fname.data = customer['Fname']
 	form.Lname.data = customer['Lname']
@@ -388,7 +420,7 @@ def add_product():
 
 	return render_template('add_product.html', form=form)
 
-#edit product
+#edit customer
 @app.route('/edit_product/<string:ItemNumber>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_product(ItemNumber):
@@ -434,13 +466,51 @@ def edit_product(ItemNumber):
 def delete_product(ItemNumber):
     cur = mysql.connection.cursor()
 
-    cur.execute("DELETE FROM product WHERE ItemNumber = %s", [ItemNumber])
+    cur.execute("DELETE FROM products WHERE ItemNumber = %s", [ItemNumber])
     mysql.connection.commit()
 
     cur.close()
 
     flash('Product Deleted', 'success')
     return redirect(url_for('adding'))
+
+#edit customer
+@app.route('/order_form/<string:ItemNumber>', methods=['GET', 'POST'])
+@is_logged_in
+def order_form(ItemNumber):
+	cur = mysql.connection.cursor()
+
+	result = cur.execute("SELECT * FROM products WHERE ItemNumber = %s", [ItemNumber])
+	product = cur.fetchone()
+
+	form = ProductForm(request.form)
+
+	form.ItemNumber.data = product['ItemNumber']
+	form.Description.data = product['Description']
+	form.Price.data = product['Price']
+	form.Available.data = product['Available']
+	form.Class.data = product['Class']
+	form.Origin.data = product['Origin']
+
+	if request.method == 'POST' and form.validate():
+		ItemNumber = request.form['Item Number']
+		Description= request.form['Description']
+	 	Price = request.form['Price']
+		Available = request.form['Amount To Reorder']
+		Class = request.form['Class']
+		Origin = request.form['Origin']
+
+		cur = mysql.connection.cursor() #create cursor
+
+		cur.execute("UPDATE products SET ItemNumber=%s, Description=%s, Price=%s, Available=%s, Class=%s, Origin=%s, Lead_Time=%s WHERE ItemNumber=%s", (ItemNumber, Description, Price, Available, Class, Origin, Lead_Time, ItemNumber))
+		mysql.connection.commit()
+
+		cur.close()
+
+		flash('Product Reorder Submitted', 'success')
+		return redirect(url_for('adding'))
+
+	return render_template('order_form.html', form=form)
 
 #Reorder
 @app.route('/reorder')
@@ -458,44 +528,6 @@ def reroder():
 		return render_template('reorder.html', msg=msg)
 
 	cur.close();
-
-#edit product
-@app.route('/order_form/<string:ItemNumber>', methods=['GET', 'POST'])
-@is_logged_in
-def order_form(ItemNumber):
-	cur = mysql.connection.cursor()
-
-	result = cur.execute("SELECT * FROM products WHERE ItemNumber = %s", [ItemNumber])
-	product = cur.fetchone()
-
-	form = ProductForm(request.form)
-
-	form.ItemNumber.data = product['ItemNumber']
-	form.Description.data = product['Description']
-	form.Price.data = product['Price']
-	form.Class.data = product['Class']
-	form.Origin.data = product['Origin']
-	form.Available.data = product['Available']
-
-	if request.method == 'POST' and form.validate():
-		ItemNumber = request.form['Item Number']
-		Description= request.form['Description']
-	 	Price = request.form['Price']
-		Class = request.form['Class']
-		Origin = request.form['Origin']
-		Available = request.form['Amount To Restock']
-
-		cur = mysql.connection.cursor() #create cursor
-
-		cur.execute("UPDATE products SET ItemNumber=%s, Description=%s, Price=%s, Class=%s, Origin=%s, Available=%s WHERE ItemNumber=%s", (ItemNumber, Description, Price, Class, Origin, Available, ItemNumber))
-		mysql.connection.commit()
-
-		cur.close()
-
-		flash('Product Ordered', 'success')
-		return redirect(url_for('adding'))
-
-	return render_template('order_form.html', form=form)
 
 #End of Day + Logout
 @app.route('/end_day_report')
@@ -527,6 +559,109 @@ def end_day_report():
 	cur.close()
 	return redirect(url_for('end_day_report'))
 
+#reports
+@app.route('/report')
+def report():
+	#create cursor
+	cur = mysql.connection.cursor()
+
+	#get reports
+	result = cur.execute("SELECT * FROM reports")
+
+	reports = cur.fetchall()
+
+	if result > 0:
+		return render_template('report.html', reports=reports)
+	else:
+		msg = 'No Reports Found'
+		return render_template('report.html', msg = msg)
+
+	#close connection
+	cur.close()
+
+#ReportForm class
+class ReportForm(Form):
+	title = StringField('Title', [validators.Length(min=1, max=200)])
+	body = TextAreaField('Body', [validators.Length(min=30)])
+
+#add report
+@app.route('/add_report', methods=['Get','POST'])
+@is_logged_in
+def add_report():
+	form = ReportForm(request.form)
+	if request.method == 'POST' and form.validate():
+		title = form.title.data
+		body = form.body.data
+
+		cur = mysql.connection.cursor()
+		cur.execute("INSERT INTO reports(title, body, author) VALUE(%s, %s, %s)", (title, body, session['username']))
+
+		mysql.connection.commit()
+		cur.close()
+
+		flash('Report Created', 'success')
+		return redirect(url_for('report'))
+
+	return render_template('add_report.html', form=form)
+
+#edit report
+@app.route('/edit_report/<string:id>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_report(id):
+
+	cur = mysql.connection.cursor()
+	result = cur.execute("SELECT * FROM reports WHERE id = %s", [id])
+
+	report = cur.fetchone()
+	form = ReportForm(request.form)
+
+	form.title.data = report['title']
+	form.body.data = report['body']
+
+	if request.method == 'POST' and form.validate():
+		title = request.form['title']
+		body = request.form['body']
+
+		cur = mysql.connection.cursor()
+		cur.execute("UPDATE reports SET title=%s, body=%s WHERE id=%s", (title, body, id))
+
+		mysql.connection.commit()
+		cur.close()
+
+		flash('Report Updated', 'success')
+		return redirect(url_for('report'))
+
+	return render_template('edit_report.html', form=form)
+
+#delete report
+@app.route('/delete_report/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_report(id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+
+    # Execute
+    cur.execute("DELETE FROM reports WHERE id = %s", [id])
+
+    # Commit to DB
+    mysql.connection.commit()
+
+    #Close connection
+    cur.close()
+
+    flash('Report Deleted', 'success')
+
+    return redirect(url_for('report'))
+
+#single report
+@app.route('/individual_report/<string:id>/')
+def individual_report(id):
+	#create cursor
+	cur = mysql.connection.cursor()
+	result = cur.execute("SELECT * FROM reports WHERE id = %s", [id])
+
+	report = cur.fetchone()
+	return render_template('individual_report.html', report=report)
 
 if __name__ == '__main__':
 	app.secret_key='secret123'

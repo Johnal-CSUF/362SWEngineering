@@ -5,7 +5,6 @@
     <h1>Customer and Product Info</h1>
     <hr>
     <div class="row">
-
       <h3>Current Customers  <a class="btn btn-info" href="/add_customer">Add Customer</a></h3>
           <table class="table table-striped">
             <tr>
@@ -45,7 +44,6 @@
                   <th>Available</th>
                   <th>Class</th>
                   <th>Origin</th>
-                  <th>Lead Time</th>
                   <th> </th>
                   <th> </th>
 
@@ -58,7 +56,6 @@
                     <td>{{product.Available}}</td>
                     <td>{{product.Class}}</td>
                     <td>{{product.Origin}}</td>
-                    <td>{{product.Lead_Time}}</td>
                     <td><a href="edit_product/{{product.ItemNumber}}" class="btn btn-default pull-right">Edit</a></td>
                     <td>
                       <form action="{{url_for('delete_product', ItemNumber=product.ItemNumber)}}" method="post">
