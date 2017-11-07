@@ -32,26 +32,28 @@ class RegisterForm(Form):
 	email = StringField('Email', [validators.Length(min=6, max=50)])
 	password = PasswordField('Password', [validators.DataRequired(),validators.EqualTo('confirm', message='Passwords do not match')])
 	confirm = PasswordField('Confirm Password')
+	manager = StringField('Manager', [validators.Length(min=2, max=3)])
 
 #user register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)
-    if request.method == 'POST' and form.validate():
-        name = form.name.data
-        email = form.email.data
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
+	form = RegisterForm(request.form)
+	if request.method == 'POST' and form.validate():
+		name = form.name.data
+		email = form.email.data
+		username = form.username.data
+		password = sha256_crypt.encrypt(str(form.password.data))
+		manager = form.manager.data
 
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
+		cur = mysql.connection.cursor()
+		cur.execute("INSERT INTO users(name, email, username, password, manager) VALUES(%s, %s, %s, %s, %s)", (name, email, username, password, manager))
 
-        mysql.connection.commit()
-        cur.close()
+		mysql.connection.commit()
+		cur.close()
+		flash('You are now registered and can log in', 'success')
+		return redirect(url_for('login'))
+	return render_template('register.html', form=form)
 
-        flash('You are now registered and can log in', 'success')
-        return redirect(url_for('login'))
-    return render_template('register.html', form=form)
 
 #user login
 @app.route('/login', methods=['GET', 'POST'])
@@ -132,15 +134,17 @@ def edit_user(id):
 	form.name.data = user['name']
 	form.username.data = user['username']
 	form.email.data = user['email']
+	form.manager.data = user['manager']
 
 	if request.method == 'POST' and form.validate():
 		name = request.form['name']
 		username = request.form['username']
 		email = request.form['email']
+		manager = request.form['manager']
 
 		cur = mysql.connection.cursor()
 
-		cur.execute("UPDATE users SET name=%s, username=%s email=%s WHERE id=%s", (name, username, email, id))
+		cur.execute("UPDATE users SET name=%s, username=%s email=%s manager=%s WHERE id=%s", (name, username, email, manager, id))
 		mysql.connection.commit()
 
 		cur.close()
@@ -206,7 +210,13 @@ def adding():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-	return render_template('dashboard.html')
+	cur = mysql.connection.cursor()
+
+	result = cur.execute("SELECT * FROM users")
+	users = cur.fetchall()
+
+	return render_template('dashboard.html', users=users)
+	cur.close()
 
 #CustomerForm class
 class CustomerForm(Form):
@@ -488,7 +498,6 @@ def order_form(ItemNumber):
 	form.ItemNumber.data = product['ItemNumber']
 	form.Description.data = product['Description']
 	form.Price.data = product['Price']
-	form.Available.data = product['Available']
 	form.Class.data = product['Class']
 	form.Origin.data = product['Origin']
 

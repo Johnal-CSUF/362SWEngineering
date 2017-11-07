@@ -2,14 +2,24 @@
 
 {%block body%}
 <body>
-	<h1>Dashboard <small>Welcome {{session.username}}</small></h1>
+	{%for user in users%}
+		{% if user.manager == 'yes' and user.username == session.username %}
+		<h1>Dashboard <small>Welcome Manager {{session.username}}</small></h1>
+		{% elif user.manager == 'no' and user.username == session.username %}
+		<h1>Dashboard <small>Welcome {{session.username}}</small></h1>
+		{%endif%}
+	{%endfor%}
 		<ul class = "list-group">
-      <li class="list-group-item"><a href="/adding">Customer and Product Info</a></li>
-      <li class="list-group-item"><a href="/reorder">Reorder Products</a></li>
+			<li class="list-group-item"><a href="/adding">Customer and Product Info</a></li>
+      <li class="list-group-item"><a href="/reorder">Product Reorder</a></li>
       <li class="list-group-item"><a href="/sale">Sales</a></li>
 			<li class="list-group-item"><a href="/report">Reports</a></li>
-			<li class="list-group-item"><a href="/user_list">List of Users</a></li>
-			<li class="list-group-item"><a href="/end_day_report">End of Day Report</a></li>
+			{%for user in users%}
+				{% if user.manager == 'yes' and user.username == session.username %}
+				<li class="list-group-item"><a href="/user_list">List of Users</a></li>
+				<li class="list-group-item"><a href="/end_day_report">End of Day Report</a></li>
+				{%endif%}
+			{%endfor%}
 	</ul>
 </body>
 
