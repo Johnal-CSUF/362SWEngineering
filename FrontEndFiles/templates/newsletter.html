@@ -1,0 +1,28 @@
+{%extends 'layout.html' %}
+{%block body%}
+<body>
+	<h1>List of Newsletter Emails</h1>
+  <hr>
+  <div class="row">
+        <table class="table table-striped">
+          <tr>
+            <th>ID</th>
+            <th>email</th>
+            <th>Register Date</th>
+          </tr>
+          {%for email in newsletter%}
+            <tr>
+              <td>{{email.id}}</td>
+              <td>{{email.email}}</td>
+              <td>{{email.register_date}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+<style type = "text/css">
+body{
+	background-color:#F8F8F8;
+}
+</style>
+{%endblock%}

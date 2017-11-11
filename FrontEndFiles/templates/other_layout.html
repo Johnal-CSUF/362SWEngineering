@@ -25,22 +25,25 @@
 					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 						<h4>Contact Us</h4>
 						<ul>
-							<li><i class="fa fa-phone"></i> (617) 555-5555</li>
-							<li><i class="fa fa-envelope"></i> support@myInventoryApp.test</li>
-							<li><i class="fa fa-map"></i> 400 Main st, Boston MA</li>
+							<li><i class="fa fa-phone"></i> (555)-555-5555</li>
+							<li><i class="fa fa-envelope"></i> support@MyInventoryApp.org</li>
+							<li><i class="fa fa-map"></i> 800 Main St, Fullerton CA</li>
 						</ul>
 					</div>
 					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 						<h4>About Us</h4>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
+						<p>We are a group of 6 CS students put together in one team to create a software application. This website is the fruit of our efforts.</p>
 					</div>
 					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-						<h4>Newsletter</h4>
-						<p>Lorem ipsum dolor sit amet</p>
-						<form>
-							<input type="text" name="email" placeholder="Enter Email">
-							<a class="btn btn-default" href="/newsletter">Submit</a>
+						<h4>Sign up for our Newsletter</h4>
+						{%from "includes/_formhelpers.html" import render_field%}
+						<form method="POST" action="">
+							<div class="form-group">
+								{{render_field(form.email, class_="form-control")}}
+							</div>
+						<input class="btn btn-default" type="submit" value="Submit">
 						</form>
+
 					</div>
 				</div>
 			</div>

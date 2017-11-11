@@ -15,10 +15,43 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 #init MySQL
 mysql = MySQL(app)
 
+#ReportForm class
+class NewsletterForm(Form):
+	email = StringField('Email', [validators.Length(min=1, max=200)])
+
+#newsletter
+@app.route('/newsletter')
+def newsletter():
+	cur = mysql.connection.cursor()
+
+	result = cur.execute("SELECT * FROM newsletter")
+	newsletter = cur.fetchall()
+
+	if result > 0:
+		return render_template('newsletter.html', newsletter=newsletter)
+	else:
+		msg = 'No Users Found'
+		return render_template('newsletter.html', msg = msg)
+
+	cur.close()
+
 #index
-@app.route('/')
+@app.route('/', methods=['Get','POST'])
 def index():
-	return render_template('home.html')
+	form = NewsletterForm(request.form)
+	if request.method == 'POST' and form.validate():
+		email = form.email.data
+
+		cur = mysql.connection.cursor()
+		cur.execute("INSERT INTO newsletter(email) VALUE(%s)", (email,))
+
+		mysql.connection.commit()
+		cur.close()
+
+		flash('Congrats! You Are Now In Our Newsletter!', 'success')
+		return redirect(url_for('about'))
+
+	return render_template('home.html', form=form)
 
 #about
 @app.route('/about')
@@ -653,6 +686,7 @@ def individual_report(id):
 
 	report = cur.fetchone()
 	return render_template('individual_report.html', report=report)
+
 
 if __name__ == '__main__':
 	app.secret_key='secret123'
