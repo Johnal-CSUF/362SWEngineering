@@ -121,7 +121,7 @@ def user_list():
 
 	cur.close()
 
-#edit article
+#edit user
 @app.route('/edit_user/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_user(id):
@@ -143,13 +143,12 @@ def edit_user(id):
 		manager = request.form['manager']
 
 		cur = mysql.connection.cursor()
+		cur.execute("UPDATE users SET name=%s, username=%s, email=%s, manager=%s WHERE id=%s", (name, username, email, manager, id))
 
-		cur.execute("UPDATE users SET name=%s, username=%s email=%s manager=%s WHERE id=%s", (name, username, email, manager, id))
 		mysql.connection.commit()
-
 		cur.close()
-		flash('User Updated', 'success')
 
+		flash('User Updated', 'success')
 		return redirect(url_for('user_list'))
 
 	return render_template('edit_user.html', form=form)
@@ -240,7 +239,7 @@ def add_customer():
 		email = form.email.data
 
 		cur = mysql.connection.cursor()
-		cur.execute("INSERT INTO customers(CustID, Fname, Lname, phone, email) VALUES(%s, %s, %s, %s, %s)", (CustID, Fname, Lname, phone, email))
+		cur.execute("INSERT INTO customers(CustID, Fname, Lname, phone, email) VALUES(%d, %s, %s, %s, %s)", (CustID, Fname, Lname, phone, email))
 
 		mysql.connection.commit()
 		cur.close()
@@ -400,7 +399,7 @@ class ProductForm(Form):
 	ItemNumber = StringField('Item Number', [validators.Length(min=1, max=5)])
 	Description = StringField('Description', [validators.Length(min=5, max=20)])
 	Price = StringField('Price', [validators.Length(min=3, max=10)])
-	Available = StringField('Available', [validators.Length(min=1, max=5)])
+	inventory_amount = StringField('Inventory Amount', [validators.Length(min=1, max=5)])
 	Class = StringField('Class', [validators.Length(min=2, max=10)])
 	Origin = StringField('Origin', [validators.Length(min=2, max=15)])
 	Lead_Time = StringField('Lead Time', [validators.Length(min=5, max=20)])
@@ -414,13 +413,13 @@ def add_product():
 		ItemNumber = form.ItemNumber.data
 		Description = form.Description.data
 	 	Price = form.Price.data
-		Available = form.Available.data
+		inventory_amount = form.inventory_amount.data
 		Class = form.Class.data
 		Origin = form.Origin.data
 		Lead_Time = form.Lead_Time.data
 
 		cur = mysql.connection.cursor()
-		cur.execute("INSERT INTO products(ItemNumber, Description, Price, Available, Class, Origin, Lead_Time) VALUES(%s, %s, %s, %s, %s, %s, %s)", (ItemNumber, Description, Price, Available, Class, Origin, Lead_Time))
+		cur.execute("INSERT INTO products(ItemNumber, Description, Price, inventory_amount, Class, Origin, Lead_Time) VALUES(%s, %s, %s, %s, %s, %s, %s)", (ItemNumber, Description, Price, inventory_amount, Class, Origin, Lead_Time))
 
 		mysql.connection.commit()
 		cur.close()
@@ -444,7 +443,7 @@ def edit_product(ItemNumber):
 	form.ItemNumber.data = product['ItemNumber']
 	form.Description.data = product['Description']
 	form.Price.data = product['Price']
-	form.Available.data = product['Available']
+	form.inventory_amount.data = product['inventory_amount']
 	form.Class.data = product['Class']
 	form.Origin.data = product['Origin']
 	form.Lead_Time.data = product['Lead_Time']
@@ -453,14 +452,14 @@ def edit_product(ItemNumber):
 		ItemNumber = request.form['Item Number']
 		Description= request.form['Description']
 	 	Price = request.form['Price']
-		Available = request.form['Available']
+		inventory_amount = request.form['Inventory Amount']
 		Class = request.form['Class']
 		Origin = request.form['Origin']
 		Lead_Time = request.form['Lead Time']
 
 		cur = mysql.connection.cursor() #create cursor
 
-		cur.execute("UPDATE products SET ItemNumber=%s, Description=%s, Price=%s, Available=%s, Class=%s, Origin=%s, Lead_Time=%s WHERE ItemNumber=%s", (ItemNumber, Description, Price, Available, Class, Origin, Lead_Time, ItemNumber))
+		cur.execute("UPDATE products SET ItemNumber=%s, Description=%s, Price=%s, inventory_amount=%s, Class=%s, Origin=%s, Lead_Time=%s WHERE ItemNumber=%s", (ItemNumber, Description, Price, inventory_amount, Class, Origin, Lead_Time, ItemNumber))
 		mysql.connection.commit()
 
 		cur.close()
@@ -505,13 +504,13 @@ def order_form(ItemNumber):
 		ItemNumber = request.form['Item Number']
 		Description= request.form['Description']
 	 	Price = request.form['Price']
-		Available = request.form['Amount To Reorder']
+		inventory_amount = request.form['Inventory Amount']
 		Class = request.form['Class']
 		Origin = request.form['Origin']
 
 		cur = mysql.connection.cursor() #create cursor
 
-		cur.execute("UPDATE products SET ItemNumber=%s, Description=%s, Price=%s, Available=%s, Class=%s, Origin=%s, Lead_Time=%s WHERE ItemNumber=%s", (ItemNumber, Description, Price, Available, Class, Origin, Lead_Time, ItemNumber))
+		cur.execute("UPDATE products SET ItemNumber=%s, Description=%s, Price=%s, inventory_amount=%s, Class=%s, Origin=%s, Lead_Time=%s WHERE ItemNumber=%s", (ItemNumber, Description, Price, inventory_amount, Class, Origin, Lead_Time, ItemNumber))
 		mysql.connection.commit()
 
 		cur.close()
@@ -527,7 +526,7 @@ def order_form(ItemNumber):
 def reroder():
 	cur = mysql.connection.cursor()
 
-	result = cur.execute("SELECT * FROM products WHERE Available = 0")
+	result = cur.execute("SELECT * FROM products WHERE inventory_amount = 0")
 	products = cur.fetchall()
 
 	if result > 0:
