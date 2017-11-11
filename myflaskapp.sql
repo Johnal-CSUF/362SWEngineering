@@ -44,6 +44,31 @@ INSERT INTO `customers` VALUES (18273,'Tana','Livingston','928-013-6823','Tana.L
 UNLOCK TABLES;
 
 --
+-- Table structure for table `newsletter`
+--
+
+DROP TABLE IF EXISTS `newsletter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `newsletter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) DEFAULT NULL,
+  `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `newsletter`
+--
+
+LOCK TABLES `newsletter` WRITE;
+/*!40000 ALTER TABLE `newsletter` DISABLE KEYS */;
+INSERT INTO `newsletter` VALUES (1,'Tana.Living@gmail.com','2017-11-11 19:19:34'),(2,'grant.goodman@yahoo.com','2017-11-11 19:21:38'),(3,'erika.tate@yahoo.com','2017-11-11 19:22:18'),(4,'something@gmail.com','2017-11-11 19:25:45'),(5,'julia.lowell@gmail.com','2017-11-11 21:18:32'),(6,'deila.cain@gmail.com','2017-11-11 21:20:48'),(7,'bob.anderson@gmail.com','2017-11-11 21:23:00'),(8,'roxanne.yates@gmail.com','2017-11-11 21:23:27'),(9,'Eric.Ma@gmail.com','2017-11-11 21:23:42'),(10,'patrick.yo@gmail.com','2017-11-11 21:25:20'),(11,'erika.tate@yahoo.com','2017-11-11 21:26:06'),(12,'yuna.cheng@gmail.com','2017-11-11 21:26:29');
+/*!40000 ALTER TABLE `newsletter` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `orders`
 --
 
@@ -79,7 +104,7 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `ItemNumber` int(10) unsigned NOT NULL,
   `Description` varchar(20) NOT NULL,
-  `Available` int(5) unsigned NOT NULL,
+  `inventory_amount` int(5) DEFAULT NULL,
   `Price` decimal(10,2) NOT NULL,
   `Class` varchar(10) NOT NULL,
   `Origin` varchar(15) NOT NULL,
@@ -112,7 +137,7 @@ CREATE TABLE `reports` (
   `body` text,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +146,7 @@ CREATE TABLE `reports` (
 
 LOCK TABLES `reports` WRITE;
 /*!40000 ALTER TABLE `reports` DISABLE KEYS */;
-INSERT INTO `reports` VALUES (12,'When The Edit Button Doesn\'t Want To WORK','AngNet','<p>I mentioned this in a previous report but I thought I&#39;d expand it a little onto another report cause this actually bothers me. Adding and deleting works just fine. I can get to the edit page after pressing the edit button but then once I try to submit the changes, I get an error. The error is weird too. Something about a long or len() type which I&#39;m not sure what it&#39;s talking about since I don&#39;t have long or len in any of my files. Sigh, we&#39;ll see what happens. I hope this works soon though because it would be nice to be able to edit on this application.&nbsp;</p>','2017-11-04 07:00:47'),(13,'Overview of the Team','CrazySailor','<p>This team is great. We don&#39;t have an official team name yet though so I don&#39;t know what we&#39;re called. I actually joined this team after being reassigned by our professor. I was told that they didn&#39;t have a team name. Now I&#39;m wondering what we should call ourselves. We&#39;re gonna present soon so we should have a team name to associate ourselves with right?&nbsp;</p>','2017-11-04 07:01:46'),(14,'World War III','Sharcade','<p>So many things are coming up. It&#39;s a battlefield out there. I hope my comrades are alright. Everyone seems ok besides the fact that midterms are upon us and are bombarding our base. For me, two of my miterms got moved to next week so I have 4 in one week. I need backup. Send help please. It&#39;s needed very much.&nbsp;</p>','2017-11-04 07:02:29'),(15,'Things still need to be done','Wizart','<p>As title says, lots of stuff still need to be done. There&#39;s also stuff that needs to be done in other projects but for this one, there&#39;s stuff that I want working that isn&#39;t working. For example, the edit button still doesn&#39;t want to work and I&#39;ve been researching days on it. I would leave it alone, work one something else, come back, research again, and then it doesn&#39;t work. Why edit button. Why.</p>','2017-11-04 07:03:05'),(16,'Going Strong','GamingBee','<p>So the team is doing well so far. We&#39;re currently in the 9th week of school and are getting closer to the deadline. We need to have our finished software done before thanksgiving break. I&#39;m sure that we&#39;re on the right track to getting there. I&#39;m surprised that the SRC requirement paper isn&#39;t due till the end of the semester. I feel better about that.</p>','2017-11-04 07:03:40'),(17,'Random Report','JollyEmu','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed molestie, lorem a ultrices maximus, turpis sapien euismod nisl, eget finibus arcu augue convallis nisl. Ut dui leo, molestie id metus et, auctor ullamcorper ex. Nam dictum rutrum posuere. Maecenas eleifend elementum scelerisque. Sed dictum tristique lacus pharetra hendrerit. Sed porta enim eu ex faucibus interdum. Donec in libero lacus. Praesent ante ex, rhoncus eu elementum id, placerat quis purus. In quis purus mi.</p>','2017-11-04 07:04:13'),(18,'testfefvfvefvfvefvefvevevefv','shorts','<p>testsferrfvewrververvefvfvsfvfvfvsdfvdfvdfvdfs</p>','2017-11-04 18:48:51');
+INSERT INTO `reports` VALUES (12,'When The Edit Button Doesn\'t Want To WORK','AngNet','<p>I mentioned this in a previous report but I thought I&#39;d expand it a little onto another report cause this actually bothers me. Adding and deleting works just fine. I can get to the edit page after pressing the edit button but then once I try to submit the changes, I get an error. The error is weird too. Something about a long or len() type which I&#39;m not sure what it&#39;s talking about since I don&#39;t have long or len in any of my files. Sigh, we&#39;ll see what happens. I hope this works soon though because it would be nice to be able to edit on this application.&nbsp;</p>','2017-11-04 07:00:47'),(13,'Overview of the Team','CrazySailor','<p>This team is great. We don&#39;t have an official team name yet though so I don&#39;t know what we&#39;re called. I actually joined this team after being reassigned by our professor. I was told that they didn&#39;t have a team name. Now I&#39;m wondering what we should call ourselves. We&#39;re gonna present soon so we should have a team name to associate ourselves with right?&nbsp;</p>','2017-11-04 07:01:46'),(14,'World War III','Sharcade','<p>So many things are coming up. It&#39;s a battlefield out there. I hope my comrades are alright. Everyone seems ok besides the fact that midterms are upon us and are bombarding our base. For me, two of my miterms got moved to next week so I have 4 in one week. I need backup. Send help please. It&#39;s needed very much.&nbsp;</p>','2017-11-04 07:02:29'),(15,'Things still need to be done','Wizart','<p>As title says, lots of stuff still need to be done. There&#39;s also stuff that needs to be done in other projects but for this one, there&#39;s stuff that I want working that isn&#39;t working. For example, the edit button still doesn&#39;t want to work and I&#39;ve been researching days on it. I would leave it alone, work one something else, come back, research again, and then it doesn&#39;t work. Why edit button. Why.</p>','2017-11-04 07:03:05'),(16,'Going Strong','GamingBee','<p>So the team is doing well so far. We&#39;re currently in the 9th week of school and are getting closer to the deadline. We need to have our finished software done before thanksgiving break. I&#39;m sure that we&#39;re on the right track to getting there. I&#39;m surprised that the SRC requirement paper isn&#39;t due till the end of the semester. I feel better about that.</p>','2017-11-04 07:03:40'),(17,'Random Report','JollyEmu','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed molestie, lorem a ultrices maximus, turpis sapien euismod nisl, eget finibus arcu augue convallis nisl. Ut dui leo, molestie id metus et, auctor ullamcorper ex. Nam dictum rutrum posuere. Maecenas eleifend elementum scelerisque. Sed dictum tristique lacus pharetra hendrerit. Sed porta enim eu ex faucibus interdum. Donec in libero lacus. Praesent ante ex, rhoncus eu elementum id, placerat quis purus. In quis purus mi.</p>','2017-11-04 07:04:13');
 /*!40000 ALTER TABLE `reports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,4 +188,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-06 22:58:25
+-- Dump completed on 2017-11-11 13:35:31
