@@ -12,7 +12,6 @@
           <th>Order Date</th>
           <th>Quantity</th>
           <th> </th>
-          <th> </th>
         </tr>
         {%for order in orders%}
           <tr>
@@ -20,7 +19,6 @@
             <td>{{order.CustID}}</td>
             <td>{{order.OrderDate}}</td>
             <td>{{order.Quantity}}</td>
-            <td><a href="edit_sale/{{order.CustID}}" class="btn btn-default pull-right">Edit</a></td>
             <td>
               <form action="{{url_for('delete_sale', ItemNumber=order.ItemNumber)}}" method="post">
                 <input type="hidden" name="_method" value="DELETE">

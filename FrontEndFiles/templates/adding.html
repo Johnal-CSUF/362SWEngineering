@@ -14,7 +14,6 @@
               <th>Phone</th>
               <th>Email</th>
               <th> </th>
-              <th> </th>
             </tr>
             {%for customer in customers%}
               <tr>
@@ -23,11 +22,9 @@
                 <td>{{customer.Lname}}</td>
                 <td>{{customer.Phone}}</td>
                 <td>{{customer.Email}}</td>
-                <td><a href="edit_customer/{{customer.CustID}}" class="btn btn-default pull-right">Edit</a></td>
-                <td>
-                  <form action="{{url_for('delete_customer', CustID=customer.CustID)}}" method="post">
+                <td>  <form action="{{url_for('delete_customer', CustID=customer.CustID)}}" method="post">
                     <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <input type="submit" value="Delete" class="btn btn-danger"><td>
                   </form>
                 </td>
               </tr>
@@ -45,7 +42,6 @@
                   <th>Class</th>
                   <th>Origin</th>
                   <th> </th>
-                  <th> </th>
 
                 </tr>
                 {%for product in products%}
@@ -56,11 +52,9 @@
                     <td>{{product.inventory_amount}}</td>
                     <td>{{product.Class}}</td>
                     <td>{{product.Origin}}</td>
-                    <td><a href="edit_product/{{product.ItemNumber}}" class="btn btn-default pull-right">Edit</a></td>
-                    <td>
-                      <form action="{{url_for('delete_product', ItemNumber=product.ItemNumber)}}" method="post">
+                    <td>  <form action="{{url_for('delete_product', ItemNumber=product.ItemNumber)}}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <input type="submit" value="Delete" class="btn btn-danger"> <td>
                       </form>
                     </td>
                   </tr>

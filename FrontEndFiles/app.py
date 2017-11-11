@@ -32,7 +32,7 @@ class RegisterForm(Form):
 	email = StringField('Email', [validators.Length(min=6, max=50)])
 	password = PasswordField('Password', [validators.DataRequired(),validators.EqualTo('confirm', message='Passwords do not match')])
 	confirm = PasswordField('Confirm Password')
-	manager = StringField('Manager', [validators.Length(min=2, max=3)])
+	manager = StringField('Manager? ("yes" or "no")', [validators.Length(min=2, max=3)])
 
 #user register
 @app.route('/register', methods=['GET', 'POST'])
@@ -546,43 +546,26 @@ def end_day_report():
 
 	cur = mysql.connection.cursor()
 
+	resultTwo = cur.execute("SELECT * FROM orders")
+	orders = cur.fetchall()
+
 	result = cur.execute("SELECT * FROM customers")
 	customers = cur.fetchall()
 
-	resultTwo = cur.execute("SELECT * FROM products")
+	resultThree = cur.execute("SELECT * FROM products")
 	products = cur.fetchall()
 
-	if result > 0 and resultTwo > 0:
-		return render_template('adding.html', customers=customers, products=products)
-	if result > 0 and resultTwo == 0:
-		msg = 'No Products Found'
-		return render_template('adding.html', msg = msg, customers=customers, products=products)
-	if result == 0 and resultTwo > 0:
+	if result > 0 and resultTwo > 0 and resultThree > 0:
+		return render_template('end_day_report.html', orders=orders, customers=customers, products=products)
+	if result > 0 and resultTwo == 0 and resultThree > 0:
+		msg = 'No Sales Found'
+		return render_template('end_day_report.html', customers = customers, products=products, msg=msg)
+	if result == 0 and resultTwo > 0 and resultThree > 0:
 		msg = 'No Customers Found'
-		return render_template('adding.html', msg = msg, customers=customers, products=products)
+		return render_template('end_day_report.html', msg = msg, products=products, orders = orders)
 	else:
-		msg = 'No Customers or Products Found'
-		return render_template('dashboard.html', msg = msg)
-
-	cur.close()
-	return redirect(url_for('end_day_report'))
-
-#reports
-@app.route('/report')
-def report():
-	#create cursor
-	cur = mysql.connection.cursor()
-
-	#get reports
-	result = cur.execute("SELECT * FROM reports")
-
-	reports = cur.fetchall()
-
-	if result > 0:
-		return render_template('report.html', reports=reports)
-	else:
-		msg = 'No Reports Found'
-		return render_template('report.html', msg = msg)
+		msg = 'No Customers or Sales or Products Found'
+		return render_template('end_day_report.html', msg = msg)
 
 	#close connection
 	cur.close()
