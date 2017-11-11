@@ -12,8 +12,6 @@
               <th>Customer ID</th>
               <th>Order Date</th>
               <th>Quantity</th>
-              <th> </th>
-              <th> </th>
             </tr>
             {%for order in orders%}
               <tr>
@@ -21,13 +19,6 @@
                 <td>{{order.CustID}}</td>
                 <td>{{order.OrderDate}}</td>
                 <td>{{order.Quantity}}</td>
-                <td><a href="edit_sale/{{order.ItemNumber}}" class="btn btn-default pull-right">Edit</a></td>
-                <td>
-                  <form action="{{url_for('delete_sale', ItemNumber=order.ItemNumber)}}" method="post">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete" class="btn btn-danger">
-                  </form>
-                </td>
               </tr>
             {% endfor %}
           </table>
@@ -40,8 +31,6 @@
               <th>Last Name</th>
               <th>Phone</th>
               <th>Email</th>
-              <th> </th>
-              <th> </th>
             </tr>
             {%for customer in customers%}
               <tr>
@@ -50,12 +39,6 @@
                 <td>{{customer.Lname}}</td>
                 <td>{{customer.Phone}}</td>
                 <td>{{customer.Email}}</td>
-                <td><a href="edit_customer/{{customer.CustID}}" class="btn btn-default pull-right">Edit</a></td>
-                <td>
-                  <form action="{{url_for('delete_customer', CustID=customer.CustID)}}" method="post">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete" class="btn btn-danger">
-                  </form>
                 </td>
               </tr>
             {% endfor %}
@@ -72,9 +55,6 @@
                   <th>Class</th>
                   <th>Origin</th>
                   <th>Lead Time</th>
-                  <th> </th>
-                  <th> </th>
-
                 </tr>
                 {%for product in products%}
                   <tr>
@@ -85,22 +65,10 @@
                     <td>{{product.Class}}</td>
                     <td>{{product.Origin}}</td>
                     <td>{{product.Lead_Time}}</td>
-                    <td><a href="edit_product/{{product.ItemNumber}}" class="btn btn-default pull-right">Edit</a></td>
-                    <td>
-                      <form action="{{url_for('delete_product', ItemNumber=product.ItemNumber)}}" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-danger">
-                      </form>
-                    </td>
                   </tr>
                 {% endfor %}
               </table>
           <br>
-
-      <h3>Inventory</h3>
-          <div class="table-responsive">
-
-          </div>
         </div>
       </div>
 {% endblock %}
