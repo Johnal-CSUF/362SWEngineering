@@ -22,11 +22,17 @@
             <td>{{user.email}}</td>
             <td>{{user.register_date}}</td>
             <td>{{user.manager}}</td>
+
+            {%for user in users%}
+              {% if user.manager == 'yes' and user.username == session.username %}
               <td> <form action="{{url_for('delete_user', id=user.id)}}" method="post">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="submit" value="Delete" class="btn btn-danger"> <td>
               </form>
             </td>
+              {%endif%}
+            {%endfor%}
+
           </tr>
         {% endfor %}
       </table>

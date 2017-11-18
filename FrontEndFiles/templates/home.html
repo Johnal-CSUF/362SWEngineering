@@ -4,7 +4,7 @@
 <body>
 	<section id="showcase">
 		<div class="ptext">
-				<h1>Welcome to <span class="primary-text">MyInventoryApp</span></h1>
+				<h1>Welcome to MyInventoryApp</h1>
 				<p>Here you can access your inventory then edit, add or delete items in it.</p>
 				{% if session.logged_in == NULL %}
 					<a href="/register" class="btn btn-info">Register</a>
@@ -77,9 +77,6 @@ img{
   width:100%;
 }
 
-.primary-text{
-  color:#6EC4DB;
-}
 #showcase{
   background-image:url("{{url_for('static', filename='comp.jpeg')}}");
   background-size:cover;
