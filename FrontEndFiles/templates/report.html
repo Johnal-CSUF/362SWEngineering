@@ -17,7 +17,7 @@
         {%for report in reports%}
           <tr>
             <td>{{report.id}}</td>
-            <td><a href = "individual_report/{{report.id}}">{{report.title}}</td>
+            <td><a href = "individual_report/{{report.id}}">{{report.title}}</a></td>
             <td>{{report.author}}</td>
             <td>{{report.create_date}}</td>
             <td><a href="edit_report/{{report.id}}" class="btn btn-default pull-right">Edit</a></td>
@@ -31,7 +31,4 @@
         {% endfor %}
       </table>
     </div>
-<style media="screen" type="text/css">
-
-</style>
 {%endblock%}
