@@ -427,6 +427,16 @@ def report():
 
 	cur.close()
 
+#single report
+@app.route('/individual_report/<string:id>/')
+def individual_report(id):
+	#create cursor
+	cur = mysql.connection.cursor()
+	result = cur.execute("SELECT * FROM reports WHERE id = %s", [id])
+
+	report = cur.fetchone()
+	return render_template('individual_report.html', report=report)
+
 #add report
 @app.route('/add_report', methods=['Get','POST'])
 @is_logged_in
@@ -496,16 +506,6 @@ def delete_report(id):
     flash('Report Deleted', 'success')
 
     return redirect(url_for('report'))
-
-#single report
-@app.route('/individual_report/<string:id>/')
-def individual_report(id):
-	#create cursor
-	cur = mysql.connection.cursor()
-	result = cur.execute("SELECT * FROM reports WHERE id = %s", [id])
-
-	report = cur.fetchone()
-	return render_template('individual_report.html', report=report)
 
 
 if __name__ == '__main__':
